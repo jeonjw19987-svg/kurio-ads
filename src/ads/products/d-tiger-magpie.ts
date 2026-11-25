@@ -16,7 +16,6 @@ import type { ProductAd } from "../template/types";
 const DIR = "assets/D_najeon";
 const HERO = { src: `${DIR}/01_product.jpg`, width: 1000, height: 1000 } as const;
 const CLOSE = { src: `${DIR}/02_detail.jpg`, width: 1000, height: 1000 } as const;
-const ABOVE = { src: `${DIR}/03_making.jpg`, width: 1000, height: 1000 } as const;
 const ROOM = { src: `${DIR}/04_in_place.jpg`, width: 1000, height: 1000 } as const;
 
 export const adDTigerMagpie: ProductAd = {
@@ -30,8 +29,8 @@ export const adDTigerMagpie: ProductAd = {
       role: "PRODUCT",
       id: "s01-product",
       caption: { title: "Tiger & Magpie.", subtitle: "Najeonchilgi.", body: ["The tiger guards the door."] },
-      // The plate on its stand, centred below the name block (×2.1 so the rim clears the caption).
-      visual: { kind: "photo", layout: "full", image: HERO, placement: { scale: 2.1, left: -493, top: 0 }, focus: [492, 300] },
+      // The plate on its stand, centred below the name block (×2.0 so the rim clears the caption, ~85% of the width).
+      visual: { kind: "photo", layout: "full", image: HERO, placement: { scale: 2.0, left: -444, top: 0 }, focus: [492, 300] },
     },
     {
       role: "DETAIL",
@@ -44,8 +43,9 @@ export const adDTigerMagpie: ProductAd = {
       role: "MAKING",
       id: "s03-making",
       caption: { body: ["Korean mother-of-pearl craft."] },
-      // From above: hand-cut shell pieces — peony, butterflies, pine needles — and the inlaid fret border.
-      visual: { kind: "photo", layout: "plate", image: ABOVE, crop: { x: 190, y: 300, w: 540, h: 700 }, focus: [380, 640] },
+      // Closer than ②: hand-cut shell pieces — peony, leaves, butterflies — and the inlaid fret border on black lacquer.
+      // (×2.7 from the seller's 1000 px close-up — the closest view the available photos allow.)
+      visual: { kind: "photo", layout: "plate", image: CLOSE, crop: { x: 150, y: 480, w: 400, h: 519 }, focus: [340, 700] },
     },
     {
       role: "IN PLACE",
