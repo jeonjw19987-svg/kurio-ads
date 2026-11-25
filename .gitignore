@@ -5,3 +5,6 @@ dist
 
 # Ignore the output video from Git but not videos you import into src/.
 out
+
+# Generated clips (Higgsfield) are large binaries: keep them as files, not in git. The slot folders stay (.gitkeep).
+public/clips/**/*.mp4

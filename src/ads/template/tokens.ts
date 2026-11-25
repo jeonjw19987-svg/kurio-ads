@@ -87,6 +87,21 @@ export const BLEED = {
   fade: 380,
 } as const;
 
+/**
+ * Generated clips (Higgsfield → Remotion). One fixed file name per cut. Drop or replace a file here and the next
+ * render (or tools/watch-clips.mjs) picks it up; an empty slot falls back to the cut's `visual`.
+ * Clips are scaled to cover 1080×1920 (9:16 sources fill exactly), muted, and cut to 90 frames.
+ */
+export const CLIP_SLOTS = ["01-product.mp4", "02-detail.mp4", "03-making.mp4", "04-in-place.mp4"] as const;
+
+/**
+ * Every clip fades into the off-white ground above the caption band, so the #111111 caption always reads and
+ * the lower band (mostly under the Reels UI anyway) is identical in every cut of every ad.
+ * Generation rule that follows: keep the subject in the upper part of the frame (y ≈ 160–1000 of 1920).
+ */
+export const CLIP_FADE = { from: 820, to: 1080 } as const;
+export const clipPath = (slug: string, index: number) => `clips/${slug}/${CLIP_SLOTS[index]}`;
+
 /** One very slow push-in per cut (storyboard §4), constant speed. Scale at the cut's last frame. */
 export const PUSH_IN_END_SCALE = 1.04;
 

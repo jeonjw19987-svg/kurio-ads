@@ -1,98 +1,101 @@
-# KURIO-ADS 인수인계 (2026-11-26)
+# KURIO-ADS 인수인계 (2026-11-26, 제작 방식 v3)
 
-KURIO 미국 Meta 광고(A·B·C·D) 영상을 Remotion으로 만드는 프로젝트입니다. 홈페이지 저장소(`C:\CLAUDE\KRUIO\kurio-public-web`)와는 별개이고, 그쪽은 읽기만 합니다.
-사양은 [STORYBOARD.md](STORYBOARD.md), 작업 지시는 [VIDEO_PRODUCTION_PROMPT.md](VIDEO_PRODUCTION_PROMPT.md)에 있습니다.
+KURIO 미국 Meta 광고(A·B·C·D) 영상 프로젝트입니다. 홈페이지 저장소(`C:\CLAUDE\KRUIO\kurio-public-web`)와는 별개이며, 그쪽은 읽기만 합니다.
+- 사양: [STORYBOARD.md](STORYBOARD.md)
+- 작업 지시: [VIDEO_PRODUCTION_PROMPT.md](VIDEO_PRODUCTION_PROMPT.md)
+- 생성 목록: [higgsfield/SHOTLIST-A-moon-jar.md](higgsfield/SHOTLIST-A-moon-jar.md)
 
 ## 1. 현재 상태
 | | |
 |---|---|
-| 브랜치 | `feature/meta-ad-production` (이 저장소 첫 커밋, 2026-11-26) |
-| 원격 | **없음.** 지시에는 '기존 feature/meta-ad-production 브랜치'라고 되어 있었지만, 이 PC에도 GitHub(`kurio-public-web`)에도 그 브랜치가 없었습니다. 이 저장소는 원격이 설정되지 않아 push 대상이 정해지지 않았습니다 |
-| A v1 | `out/A-moon-jar-v1/` (2026-11-25). 이전 채팅 브리프 기준. 보존하며 덮어쓰지 않습니다. v1 소스는 git에 없습니다(당시 첫 커밋이 git 사용자 설정 부재로 실패). 설명은 `docs/AD-A-MOON-JAR.md` |
-| **A v2** | `out/A-moon-jar-v2/` (2026-11-26). 스토리보드 v2 기준. ④ IN PLACE 자료가 없어 공개 집행용은 아닙니다 |
-| 엔드카드 마스터 | `out/shared/KURIO_ENDCARD_v2.mp4` (90프레임). B·C·D도 이 파일을 그대로 씁니다 |
+| 브랜치 | `feature/meta-ad-production`. 원격이 없어 push 대상이 정해지지 않았습니다 |
+| **제작 방식 (v3~)** | **Higgsfield**가 실제 상품 사진을 바탕으로 컷별 영상을 생성하고, **Remotion**이 편집·자막·공통 엔드카드·최종 MP4를 맡습니다. Remotion에서 사진을 확대·배치만 반복하는 방식(v1·v2)은 중단했습니다 |
+| Higgsfield | **아직 연결되지 않았습니다** (MCP·CLI·API 키 없음). 생성 0건, 크레딧 사용 0. 연결 방법과 비용은 §7을 봅니다 |
+| A v1 | 영상 `out/A-moon-jar-v1/`. 소스는 `archive/ad-a-v1/`에 재구성해 두었습니다(당시 커밋 안 됨, README 참조) |
+| A v2 | 영상 `out/A-moon-jar-v2/`. 소스는 git 태그 `ad-a-v2`(커밋 a895b2e) |
+| A v3 | 생성 클립을 기다리는 중입니다. `out/A-moon-jar-v3/`에 시작 이미지(`keyframes/`)와 DRAFT 스틸이 있습니다 |
+| 엔드카드 마스터 | `out/shared/KURIO_ENDCARD_v2.mp4`. 모든 광고가 이 파일을 그대로 붙입니다 |
 | B·C·D | 아직 만들지 않음 |
-| Remotion | 4.0.547, Node 26.13.1. 플러그인 `remotion@remotion`, Skills 14개 설치됨 |
 
-`out/`은 `.gitignore` 대상입니다. 영상, 스틸, 비교 자료는 git에 들어가지 않으니 파일로 따로 보관합니다.
+`out/`과 `public/clips/**/*.mp4`는 git에 포함되지 않습니다(용량). 영상 파일은 따로 보관합니다.
 
-## 2. 실행
+## 2. 생성 클립 → 최종 광고 흐름
 ```
-npm run dev                      # Remotion Studio (기본 http://localhost:3000)
-npx remotion studio --port 3123  # 다른 포트로 열 때
+public/clips/a-moon-jar/
+  01-product.mp4   ① PRODUCT
+  02-detail.mp4    ② DETAIL
+  03-making.mp4    ③ MAKING
+  04-in-place.mp4  ④ IN PLACE
 ```
-Studio의 `KURIO-Ads` 폴더 구성:
-- `KURIO-AD-A-MOON-JAR`: 15초 전체 미리보기
-- `KURIO-AD-A-MOON-JAR-BODY`: 12초 본편
-- `KURIO-EndCard`: 엔드카드
+- **파일을 넣거나 교체하면 끝입니다.** 렌더링할 때 Remotion이 어느 슬롯에 파일이 있는지 확인합니다(`resolveClips`, 공개 폴더에 HEAD 요청).
+  - 파일이 있으면 그 클립을 쓰고, 없으면 그 컷의 대체 화면(v2 화면)을 씁니다.
+- 클립 처리:
+  - 1080×1920을 덮도록 맞추고 무음으로 씁니다. 앞 3초(90프레임)만 쓰며, `clipTrimSec`으로 시작점을 옮길 수 있습니다.
+  - Remotion이 추가 푸시인을 넣지 않습니다. 카메라 움직임은 생성 단계에서 정합니다.
+- 모든 클립은 y 820→1080 구간에서 #F4F1EC로 흐려집니다. 그 아래는 자막 띠입니다. #111111 자막이 어떤 영상 위에서도 읽히고, 네 편의 아래 띠가 똑같아집니다.
+  - 그래서 생성할 때 **피사체를 화면 위쪽(y 약 160–1000)**에 둡니다.
+- 한 컷이라도 대체 화면이면 결과물 이름에 `_DRAFT`가 붙습니다. 최종본과 섞이지 않게 하기 위해서입니다.
 
-## 3. 렌더링 (번들 1회, 캐시 없음)
+**자동 렌더링:**
 ```
-node tools/render-ad.mjs KURIO-AD-A-MOON-JAR out/A-moon-jar-v2 KURIO_AD_A_MOON_JAR_v2 --stills-only   # 스틸 5장 + 썸네일
-node tools/render-ad.mjs KURIO-AD-A-MOON-JAR out/A-moon-jar-v2 KURIO_AD_A_MOON_JAR_v2                 # + MP4
+npm run a:watch       # public/clips/a-moon-jar 감시 → 파일이 바뀌고 다운로드가 끝나면(크기 3초간 불변) 자동 렌더링
+npm run a:render      # 한 번 렌더링 → out/A-moon-jar-v3/KURIO_AD_A_MOON_JAR_v3(.mp4|_THUMBNAIL.png|stills/)
+npm run a:keyframes   # Higgsfield 시작 이미지 + 스틸만
 ```
-- 최종 MP4는 12초 본편과 엔드카드 마스터를 **재인코딩 없이** 연결해 만듭니다(ffmpeg concat, `-c copy`).
-- 두 파일의 인코딩 설정은 같습니다: H.264, crf 18, yuv420p, bt709, 무음.
-- 엔드카드 마스터는 없을 때만 렌더링합니다. 엔드카드를 고쳤다면 `--rebuild-endcard --endcard-version=v3`처럼 버전을 올리고, 네 편을 모두 다시 만듭니다.
-- v2 확인 결과: 450프레임, 15.000초. 최종본 13.5초·14.95초 프레임이 마스터 1.5초·2.95초 프레임과 MD5가 일치합니다.
+렌더링할 때 각 클립을 검사합니다(해상도, fps, 길이, 9:16 여부). 3초보다 짧거나, 9:16이 아니거나, 1080보다 작으면 경고를 출력합니다.
 
-## 4. 제품 실루엣 추출 (①·② 컷아웃)
-새 패키지 없이 Windows .NET과 Node만 씁니다. Python, OpenCV, GPU 매팅 모델은 설치하지 않았습니다(저장공간).
-1. 제품 사진을 1000×1000 BGR 원시 파일로 만듭니다. PowerShell System.Drawing을 쓰며, 방법은 `tools/check-silhouette.ps1`과 같은 방식입니다.
-2. `node tools/trace-silhouette.cjs <in.bgr> <contour.json>`을 실행합니다. 중심에서 방사선으로 바깥쪽 색 경계를 찾고, 이상값을 보정한 뒤 평활화합니다. 입구 구간은 모서리가 살도록 약하게만 평활화합니다.
-3. `powershell -File tools/check-silhouette.ps1 <contour.json> <overlay.png>`로 빨간 윤곽선을 사진 위에 그려 눈으로 확인합니다.
-4. `node tools/contour-to-ts.cjs <contour.json> src/ads/products/<id>.silhouette.ts <exportName> <사진경로>`를 실행합니다. 윤곽을 4px 안쪽으로 줄여 배경색이 묻어나지 않게 합니다.
+## 3. 렌더링 원리 (tools/render-ad.mjs)
+- 번들은 한 번만 만들고 캐시를 쓰지 않습니다. 임시 폴더는 끝나면 지웁니다.
+- 12초 본편과 엔드카드 마스터를 **재인코딩 없이** 연결합니다(ffmpeg concat `-c copy`). 둘 다 H.264, crf 18, yuv420p, bt709, 무음입니다.
+- 엔드카드 마스터는 없을 때만 렌더링합니다. 엔드카드를 고쳤다면 `--rebuild-endcard --endcard-version=v3`처럼 버전을 올리고 네 편을 모두 다시 만듭니다.
+- 확인 결과(v2 및 v3 파이프라인 테스트): 450프레임, 15.000초. 최종본의 엔드카드 프레임 해시가 마스터와 일치합니다.
 
-중심점(`cx, cy`)과 반경 범위는 달항아리 기준값입니다. 다른 제품은 스크립트 상단 값을 조정해야 합니다.
+## 4. 시작 이미지 (keyframes)
+`KF-A-01…04`는 Remotion의 정지 화면(`Ad-A` 폴더)으로, 각 컷 대체 화면의 첫 프레임에서 자막을 뺀 것입니다.
+- ①② 실제 사진에서 분리한 달항아리를 #F4F1EC 스테이지에 놓고 좌측광 그림자를 넣은 이미지입니다. 네 편의 배경, 조명 방향, 크기를 맞추는 기준이 됩니다.
+- ③ 실제 제작 흔적 사진(안쪽 유약과 성형 자국)입니다.
+- ④ 공간 장면 생성에 쓸 제품 참고 이미지입니다(①과 같음).
+
+**제품 실루엣 추출**(새 패키지 없이 .NET과 Node 사용):
+1. 1000×1000 BGR 원시 파일을 만듭니다(`tools/check-silhouette.ps1` 방식).
+2. `node tools/trace-silhouette.cjs <in.bgr> <contour.json>`
+3. `powershell -File tools/check-silhouette.ps1 <contour.json> <overlay.png>`로 눈으로 확인합니다.
+4. `node tools/contour-to-ts.cjs <contour.json> src/ads/products/<id>.silhouette.ts <name> <사진>`
+
+중심점과 반경 범위는 달항아리 기준값이라 다른 제품은 조정해야 합니다.
 
 ## 5. 템플릿 구조
 ```
 src/ads/template/
-  tokens.ts            규격·색·Reels 안전 영역·자막·스테이지·그림자·푸시인 고정값
-  types.ts             ProductAd / AdScene / CutVisual(cutout | bleed | missing)
-  Visuals.tsx          컷아웃 스테이지(그림자 포함), 화면 위쪽 사진+아래로 흐려짐, PHOTO NEEDED 표시, 푸시인
-  Caption.tsx          하단 자막(아래 끝 y=1240, Regular 64px, ①은 0프레임, 나머지는 0.3초 후)
-  EndCard.tsx          공용 엔드카드(입력값 없음)
-  ProductScene.tsx / ProductAdVideo.tsx
-src/ads/products/
-  a-moon-jar.ts            A 데이터(자막·컷별 자료·출처)
-  a-moon-jar.silhouette.ts 생성 파일(직접 수정 금지)
-tools/                     render-ad.mjs, trace-silhouette.cjs, contour-to-ts.cjs, check-silhouette.ps1
-public/products/a-moon-jar 01-cover.jpg, 02-detail.png (와유재 사진, KURIO 등록본을 그대로 복사)
-public/fonts/line-seed     LINE Seed Sans Thin/Regular (SIL OFL 1.1)
+  tokens.ts         규격·색·안전 영역·자막·스테이지·그림자·푸시인·클립 슬롯·클립 흐림 구간(CLIP_FADE)
+  types.ts          ProductAd(slug 포함) / AdScene(visual = 대체 화면, clipTrimSec) / AdProps(clips)
+  ProductAdVideo.tsx  컷 배치, resolveClips(슬롯 확인)
+  ProductScene.tsx    클립 또는 대체 화면 + 자막. KeyframeScene(시작 이미지)
+  Visuals.tsx         대체 화면(컷아웃 스테이지, 위쪽 사진+흐림, PHOTO NEEDED)
+  Caption.tsx / EndCard.tsx
+src/ads/products/a-moon-jar.ts (+ .silhouette.ts)
+tools/  render-ad.mjs · watch-clips.mjs · trace-silhouette.cjs · contour-to-ts.cjs · check-silhouette.ps1
+higgsfield/SHOTLIST-A-moon-jar.md   생성 목록·프롬프트·검수 항목·비용 추정
+archive/ad-a-v1/                    v1 소스 (빌드 제외)
 ```
 
-## 6. A v2에서 바꾼 것 (v1 대비)
-- 사각형 사진 틀을 없앴습니다.
-  - ①② 제품을 실루엣으로 분리해 #F4F1EC 위에 놓고, 좌측광 기준으로 오른쪽에 접지·그림자를 넣었습니다.
-  - ③ 사진이 화면 위쪽을 채우고 아래로 흐려집니다.
-- 자막을 위쪽 Thin 76px에서 아래쪽 Regular 64px로 옮겼습니다. 표시 시점은 0.3초 후이고, ①만 첫 프레임부터 나옵니다.
-- 카메라는 좌우 이동·풀백을 없애고, 모든 컷을 일정 속도 푸시인 1회로 바꿨습니다.
-- 카피는 스토리보드 문구로 되돌렸습니다. ③만 근거가 없어 대체 문구를 썼습니다(STORYBOARD.md §3).
-- ③을 2장 콜라주에서 제작 흔적 한 화면으로 바꿨습니다.
-- ④는 와유재 매장 사진(24cm) 대신 'PHOTO NEEDED'를 표시합니다. 제품 확대 사진이나 생성 이미지로 대체하지 않았습니다.
-- 엔드카드: 문구를 Learn More로 하고, 워드마크(112→176px)와 CTA(26→46px, 외곽선 3px)를 키웠습니다. 0.3초 간격으로 표시하고, 마스터 파일 1개를 연결합니다.
+## 6. 지켜야 할 것
+- 확인되지 않은 공예 제작 과정을 실제처럼 표현하지 않습니다. ③에서는 손, 물레, 흙, 도구를 생성하지 않고 빛 변화만 줍니다. 실제 제작 영상이 있으면 그것을 씁니다.
+- ②의 허리 접합선과 가마 얼룩은 원본에 없으므로 만들지 않습니다.
+- ④는 생성한 공간이므로 'AI 생성 공간'으로 기록하고, Meta의 AI 고지 기준을 확인한 뒤 집행합니다.
+- 생성 결과는 원본 사진과 형태와 색을 대조해 검수한 뒤에만 슬롯에 넣습니다(SHOTLIST §4).
+- 유료 생성은 크레딧(비용)을 확인하고 별도 승인을 받은 뒤 실행합니다.
+- 홈페이지 저장소, `main`, Production은 건드리지 않습니다.
 
-## 7. 추가로 확보해야 할 자료
-| # | 컷 | 필요한 것 | 조건 | 지금 있는 후보 |
-|---|---|---|---|---|
-| 1 | ④ IN PLACE | 이 달항아리가 현대 주거 공간의 콘솔이나 선반 위에 놓인 **실제 사진 또는 3초 이상 고정 영상** | 16cm 반무광 제품. 여백 넉넉히, 좌측 측광, 소품은 받침대 수준. 세로 원본 높이 2160px 이상(또는 4K 영상). 정면이나 약간 위 시점 | 와유재 상세페이지 `…/425c550184aa9.jpeg`(티크 사이드보드 위 한 점, 480×430). 고해상도 원본과 허락이 필요합니다 |
-| 2 | ③ MAKING | 신동범 작가가 물레에서 작업하는 **손만 나오는 영상 또는 사진** | 얼굴 금지. 실제 제작 방식(한 번에 빚는지, 두 반쪽을 잇는지) 확인 포함 | `…/f8058a54c5197.png` 오른쪽 절반(손만, 1440×900 중 절반). 왼쪽 절반은 얼굴이 나와 쓸 수 없습니다. 허락이 필요합니다 |
-| 3 | ② DETAIL | 허리 접합선과 가마 얼룩 클로즈업 | 16cm에 접합선이 실제로 있는지 먼저 확인 | 없음 |
-| 4 | ① PRODUCT | 정면, 무지 배경, 좌측광 스튜디오 컷(3000px 이상) | 네 편이 같은 세팅 | 지금 컷아웃은 비스듬한 위 시점입니다 |
-| 5 | 전체 | 와유재·신동범세라믹스튜디오의 **광고 사용 서면 허락**(Meta, 미국, 기간) | 공개 집행의 전제 조건 | 운영자 결정(2026-11-25)만 있습니다 |
-| 6 | 사실 | 제작 방식(두 반쪽 여부), 사진의 제품이 16cm인지 | ③ 원래 문구를 쓰려면 필요 | — |
-| 7 | ⑤ | 확정된 KURIO 로고 파일 | 사이트도 임시 텍스트 워드마크를 씁니다 | 텍스트 워드마크(LINE Seed Sans Regular, 자간 0.32em) |
-
-## 8. Higgsfield(생성형 영상) 검토 — 크레딧 사용 0
-| 컷 | 판단 |
+## 7. Higgsfield 연결 (2026-11-26 조사, 미연결)
+| 방법 | 내용 |
 |---|---|
-| ① ② | 필요 없습니다. 실사 사진과 Remotion 푸시인으로 충분합니다 |
-| ③ MAKING | **쓰지 않습니다.** 생성한 제작 장면은 실제 작가의 작업처럼 보이게 되어 허위 표현이 됩니다 |
-| ④ IN PLACE | 기술적으로 가능한 유일한 후보입니다(배경 공간만 생성하고 실제 제품 사진을 합성). 하지만 실제 집에 놓인 것처럼 보이는 상품 광고가 되므로 권장하지 않습니다. 쓴다면 운영자 승인, AI 생성 표시, Meta 정책 확인이 필요합니다. **촬영이 우선입니다** |
-| ⑤ | 필요 없습니다 |
+| CLI (권장) | `@higgsfield/cli` 1.2.2 (npm, 공식 저장소 github.com/higgsfield-ai/cli). `npm install -g @higgsfield/cli` → `higgsfield auth login`(사용자가 브라우저에서 로그인) → `higgsfield account`(잔액), `higgsfield model list`, `higgsfield generate cost …`(비용 확인, 무료), `higgsfield generate create <model> --start-image … --wait` |
+| MCP | 공식 원격 MCP `https://mcp.higgsfield.ai/mcp`. claude.ai의 커넥터 설정에서 사용자 지정 커넥터로 추가하고 로그인합니다. 도구 목록은 공개되어 있지 않습니다 |
+| API / SDK | `@higgsfield/client` 0.2.6 (Node), `higgsfield-client` (Python). 키는 console.higgsfield.ai에서 발급(`HF_API_KEY`/`HF_API_SECRET` 등). 요금은 초당 USD입니다 |
 
-## 9. 주의
-- 홈페이지 저장소, `main`, Production은 건드리지 않습니다. 사진과 폰트는 복사만 해 왔습니다.
-- 와유재 사진은 공개 광고에 쓰기 전에 서면 허락을 받아야 합니다.
-- 렌더링은 `tools/render-ad.mjs`로 합니다. `npx remotion render`를 반복하면 번들 캐시가 쌓입니다(`node_modules/.cache`, 현재 약 140MB).
+- 구독 플랜(2026-11-25 기준): Starter $19/월(270크레딧), Plus $59(1,200), Ultra $129(3,000) 등.
+- **생성별 크레딧 차감량은 공개되어 있지 않습니다.** 로그인 후 `generate cost`로 확인합니다.
+- MCP와 CLI 사용은 '무제한' 혜택이 적용되지 않고 크레딧이 차감됩니다.
+- **약관 4.4:** Enterprise가 아닌 계정의 입력물과 결과물은 모델 학습에 쓰일 수 있습니다. 상업적 사용은 허용됩니다.
+- 와유재 사진은 서면 허락이 없으므로, 업로드하기 전에 운영자 결정이 필요합니다.

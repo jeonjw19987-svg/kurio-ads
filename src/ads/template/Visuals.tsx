@@ -7,6 +7,8 @@ import type { CutRole, CutVisual, Rect, Silhouette, SourceImage } from "./types"
 const PushIn: React.FC<{ origin: string; children: React.ReactNode }> = ({ origin, children }) => {
   const frame = useCurrentFrame();
   const { durationInFrames } = useVideoConfig();
+  // A one-frame Still (Higgsfield keyframe) has no move: it is the cut's first frame.
+  if (durationInFrames < 2) return <AbsoluteFill>{children}</AbsoluteFill>;
   return (
     <AbsoluteFill
       style={{

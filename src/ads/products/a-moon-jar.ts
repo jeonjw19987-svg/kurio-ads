@@ -17,6 +17,7 @@ const DETAIL = { src: "products/a-moon-jar/02-detail.png", width: 1440, height: 
 export const adAMoonJar: ProductAd = {
   code: "A",
   compositionId: "KURIO-AD-A-MOON-JAR",
+  slug: "a-moon-jar",
   productName: "Korean moon jar",
   scenes: [
     {

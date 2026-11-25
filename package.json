@@ -11,6 +11,7 @@
   "dependencies": {
     "@remotion/cli": "4.0.547",
     "@remotion/fonts": "4.0.547",
+    "@remotion/media": "4.0.547",
     "react": "19.3.1",
     "react-dom": "19.3.1",
     "remotion": "4.0.547"
@@ -27,7 +28,10 @@
     "dev": "remotion studio",
     "build": "remotion bundle",
     "upgrade": "remotion upgrade",
-    "lint": "eslint src && tsc"
+    "lint": "eslint src && tsc",
+    "a:keyframes": "node tools/render-ad.mjs KURIO-AD-A-MOON-JAR out/A-moon-jar-v3 KURIO_AD_A_MOON_JAR_v3 --stills-only --keyframes",
+    "a:render": "node tools/render-ad.mjs KURIO-AD-A-MOON-JAR out/A-moon-jar-v3 KURIO_AD_A_MOON_JAR_v3",
+    "a:watch": "node tools/watch-clips.mjs KURIO-AD-A-MOON-JAR a-moon-jar out/A-moon-jar-v3 KURIO_AD_A_MOON_JAR_v3"
   },
   "allowScripts": {
     "esbuild": false
