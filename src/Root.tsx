@@ -1,5 +1,8 @@
 import { Composition, Folder, Still } from "remotion";
 import { adAMoonJar } from "./ads/products/a-moon-jar";
+import { adBTraditionalGat } from "./ads/products/b-traditional-gat";
+import { adCGotaeGat } from "./ads/products/c-gotae-gat";
+import { adDTigerMagpie } from "./ads/products/d-tiger-magpie";
 import { EndCard } from "./ads/template/EndCard";
 import { ProductAdVideo, resolveClips } from "./ads/template/ProductAdVideo";
 import { KeyframeScene } from "./ads/template/ProductScene";
@@ -51,6 +54,10 @@ export const RemotionRoot: React.FC = () => {
     <>
       <Folder name="KURIO-Ads">
         <AdCompositions ad={adAMoonJar} />
+        <AdCompositions ad={adBTraditionalGat} />
+        {/* C: internal review template only (image permission pending) — stills, no MP4. */}
+        <AdCompositions ad={adCGotaeGat} />
+        <AdCompositions ad={adDTigerMagpie} />
         {/* Shared end card. Rendered once; the same file goes into every ad. */}
         <Composition id="KURIO-EndCard" component={EndCard} durationInFrames={cut} {...size} />
       </Folder>

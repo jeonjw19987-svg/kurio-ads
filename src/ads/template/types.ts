@@ -24,14 +24,34 @@ export type Silhouette = {
 /** The four content cuts, in storyboard order (§3). */
 export type CutRole = "PRODUCT" | "DETAIL" | "MAKING" | "IN PLACE";
 
+/** Explicit image placement (screen px, relative to the layout's area) instead of cover-fit. */
+export type Placement = { scale: number; left: number; top: number };
+
 export type CutVisual =
   /**
    * v4: a photo in one of the two template layouts (tokens.ts → PLATE).
    * - "full": covers the whole frame (supplied 9:16 images with a light upper area for the caption).
    * - "plate": bleeds off left/right/bottom from PLATE.top and softens into the ground band above.
    * `crop` (source px) limits which part of the source is used; `focus` (source px) is the push-in centre.
+   * `matte` (brightness factor): studio shot on a flat light background, multiplied onto the ground — lets a
+   * product sit lower or smaller in the frame on KURIO's ground with no seam. Needs `placement`.
    */
-  | { kind: "photo"; layout: "full" | "plate"; image: SourceImage; crop?: Rect; focus: [number, number] }
+  | { kind: "photo"; layout: "full" | "plate"; image: SourceImage; crop?: Rect; focus: [number, number]; matte?: number; placement?: Placement }
+  /**
+   * IN PLACE composite for a product with no photo of itself in a room: the shared set (tokens.ts → SET) with the
+   * matte product photo placed on the shelf. `surfaceY` is the shelf's back edge on screen. Always a staged composite.
+   */
+  | {
+      kind: "set";
+      image: SourceImage;
+      matte: number;
+      placement: Placement;
+      focus: [number, number];
+      surfaceY: number;
+      contact?: { x: number; y: number; w: number };
+      /** Optional walnut display stand (screen px): rod from `top` down to a round base at `baseY`. */
+      stand?: { x: number; top: number; baseY: number };
+    }
   /** v2/v3 drafts: cut-out product on the ground (also the Higgsfield keyframe source). */
   | { kind: "cutout"; image: SourceImage; silhouette: Silhouette; focus?: [number, number] }
   /** v2/v3 drafts: photo from the top edge fading into the ground. */

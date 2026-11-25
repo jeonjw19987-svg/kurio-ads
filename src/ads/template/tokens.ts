@@ -96,6 +96,33 @@ export const PLATE = {
   fade: 28,
 } as const;
 
+/**
+ * Shared IN PLACE set (staged composite) — warm plaster wall, window light from the LEFT (same light direction as
+ * every other cut), slim walnut shelf. Fixed for every ad that needs it; only the shelf height comes from the data.
+ */
+export const SET = {
+  wall: "#E7DED1",
+  wallLight: "rgba(255, 250, 241, 0.7)",
+  wallShade: "#D6CBBB",
+  windowLight: [
+    { x: -60, y: 90, w: 210, h: 980 },
+    { x: 210, y: 40, w: 180, h: 1000 },
+    { x: 450, y: -10, w: 120, h: 900 },
+  ],
+  shelfDepth: 96,
+  shelfFace: 46,
+  /** Display stand (rod, base) in px. */
+  standRod: 14,
+  standBase: 190,
+  woodTopBack: "#5E412D",
+  woodTopFront: "#7A5639",
+  woodFace: "#4B3222",
+  woodFaceDark: "#3A2619",
+} as const;
+
+/** Cast shadow of matte photos and set objects: light from the LEFT → shadow right and slightly down. */
+export const CAST_SHADOW = { dx: 64, dy: 26, blur: 14, opacity: 0.2 } as const;
+
 // ── Generated clips (Higgsfield pipeline, v3+) ─────────────────────────────────────────────────────────
 /**
  * One fixed file name per cut in public/clips/<slug>/. A file there replaces the cut's still image; clips are

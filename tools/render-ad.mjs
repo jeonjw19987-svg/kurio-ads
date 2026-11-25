@@ -63,10 +63,11 @@ try {
   ad.scenes.forEach((scene, i) => {
     const clip = clips[i];
     if (!clip) {
-      const final = scene.visual.kind === "photo";
-      if (!final) drafts.push(`${i + 1} ${scene.role}`);
+      // "photo" = approved image in a template layout; "set" = the shared staged IN PLACE composite.
+      const final = scene.visual.kind === "photo" || scene.visual.kind === "set";
+      if (!final) drafts.push(`${i + 1} ${scene.role}${scene.visual.need ? ` (needs: ${scene.visual.need})` : ""}`);
       const src = scene.visual.image?.src ?? "—";
-      console.log(`  ${i + 1} ${scene.role.padEnd(9)} — ${scene.visual.kind}${scene.visual.layout ? `/${scene.visual.layout}` : ""}  ${src}${final ? "" : "  (draft visual)"}`);
+      console.log(`  ${i + 1} ${scene.role.padEnd(9)} — ${scene.visual.kind}${scene.visual.layout ? `/${scene.visual.layout}` : ""}${scene.visual.matte ? " (matte)" : ""}  ${src}${final ? "" : "  (draft visual)"}`);
       return;
     }
     const p = probe(path.join(root, "public", clip));

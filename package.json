@@ -32,7 +32,12 @@
     "a:stills": "node tools/render-ad.mjs KURIO-AD-A-MOON-JAR out/A-moon-jar-v4 KURIO_AD_A_MOON_JAR_v4 --stills-only --thumbnail=KURIO_AD_A_THUMBNAIL_v4.png",
     "a:render": "node tools/render-ad.mjs KURIO-AD-A-MOON-JAR out/A-moon-jar-v4 KURIO_AD_A_MOON_JAR_v4 --thumbnail=KURIO_AD_A_THUMBNAIL_v4.png",
     "a:keyframes": "node tools/render-ad.mjs KURIO-AD-A-MOON-JAR out/A-moon-jar-v4 KURIO_AD_A_MOON_JAR_v4 --stills-only --keyframes --thumbnail=KURIO_AD_A_THUMBNAIL_v4.png",
-    "a:watch": "node tools/watch-clips.mjs KURIO-AD-A-MOON-JAR a-moon-jar out/A-moon-jar-v5 KURIO_AD_A_MOON_JAR_v5"
+    "a:watch": "node tools/watch-clips.mjs KURIO-AD-A-MOON-JAR a-moon-jar out/A-moon-jar-v5 KURIO_AD_A_MOON_JAR_v5",
+    "b:stills": "node tools/render-ad.mjs KURIO-AD-B-TRADITIONAL-GAT out/B-traditional-gat-v1 KURIO_AD_B_TRADITIONAL_GAT_v1 --stills-only --thumbnail=KURIO_AD_B_THUMBNAIL_v1.png",
+    "b:render": "node tools/render-ad.mjs KURIO-AD-B-TRADITIONAL-GAT out/B-traditional-gat-v1 KURIO_AD_B_TRADITIONAL_GAT_v1 --thumbnail=KURIO_AD_B_THUMBNAIL_v1.png",
+    "c:stills": "node tools/render-ad.mjs KURIO-AD-C-GOTAE-GAT out/C-gotae-gat-review KURIO_AD_C_GOTAE_GAT_v1 --stills-only --thumbnail=KURIO_AD_C_THUMBNAIL_v1.png",
+    "d:stills": "node tools/render-ad.mjs KURIO-AD-D-TIGER-MAGPIE out/D-tiger-magpie-v1 KURIO_AD_D_TIGER_MAGPIE_v1 --stills-only --thumbnail=KURIO_AD_D_THUMBNAIL_v1.png",
+    "d:render": "node tools/render-ad.mjs KURIO-AD-D-TIGER-MAGPIE out/D-tiger-magpie-v1 KURIO_AD_D_TIGER_MAGPIE_v1 --thumbnail=KURIO_AD_D_THUMBNAIL_v1.png"
   },
   "allowScripts": {
     "esbuild": false
