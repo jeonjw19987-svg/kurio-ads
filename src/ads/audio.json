@@ -1,0 +1,5 @@
+{
+  "_note": "Shared AudioTrack for every KURIO ad (A–D). null = silent (v4). When a commercially licensed track is approved, put it in public/audio/ and set src to its public path, e.g. \"audio/kurio-track.mp3\". The same track then goes into all four ads: Studio previews it, and tools/render-ad.mjs muxes it under the final 15 s video (video stream copied, not re-encoded).",
+  "src": null,
+  "volume": 1
+}

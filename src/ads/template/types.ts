@@ -1,0 +1,83 @@
+/**
+ * Data model for a KURIO product ad. A, B, C and D share one template; a product file fills these types.
+ * Spec: storyboard v2 (2026-11-25) + v4 art direction (2026-11-26).
+ * Only the product, its images and its caption lines change between ads. Sizes, positions, timing,
+ * motion, type and the end card are fixed in the template (tokens.ts) — the data cannot change them.
+ */
+
+export type Rect = { x: number; y: number; w: number; h: number };
+
+export type SourceImage = {
+  /** Path inside public/, e.g. "assets/A_moonjar/01_product_v4.png.png". */
+  src: string;
+  /** Source image size in pixels. */
+  width: number;
+  height: number;
+};
+
+/** The product's outline in the source image's own pixels (tools/trace-silhouette.cjs → tools/contour-to-ts.cjs). */
+export type Silhouette = {
+  bbox: Rect;
+  points: [number, number][];
+};
+
+/** The four content cuts, in storyboard order (§3). */
+export type CutRole = "PRODUCT" | "DETAIL" | "MAKING" | "IN PLACE";
+
+export type CutVisual =
+  /**
+   * v4: a photo in one of the two template layouts (tokens.ts → PLATE).
+   * - "full": covers the whole frame (supplied 9:16 images with a light upper area for the caption).
+   * - "plate": bleeds off left/right/bottom from PLATE.top and softens into the ground band above.
+   * `crop` (source px) limits which part of the source is used; `focus` (source px) is the push-in centre.
+   */
+  | { kind: "photo"; layout: "full" | "plate"; image: SourceImage; crop?: Rect; focus: [number, number] }
+  /** v2/v3 drafts: cut-out product on the ground (also the Higgsfield keyframe source). */
+  | { kind: "cutout"; image: SourceImage; silhouette: Silhouette; focus?: [number, number] }
+  /** v2/v3 drafts: photo from the top edge fading into the ground. */
+  | { kind: "bleed"; image: SourceImage; crop: Rect }
+  /** No cleared material yet: a plain "photo needed" note, so a gap is never hidden. */
+  | { kind: "missing"; need: string };
+
+export type AdScene = {
+  role: CutRole;
+  /** Short id used for still file names, e.g. "s01-product". */
+  id: string;
+  caption: {
+    /** ① PRODUCT only: product name (Bold, largest). */
+    title?: string;
+    /** ① PRODUCT only: name in its own language (secondary colour), one name block with the title. */
+    subtitle?: string;
+    /** Descriptive lines, one entry per line break as the storyboard sets them. */
+    body: string[];
+  };
+  /** The cut's image. A generated clip in public/clips/<slug>/ replaces it when present. */
+  visual: CutVisual;
+  /** Seconds to skip at the start of a generated clip (default 0). The cut always uses 3 s. */
+  clipTrimSec?: number;
+};
+
+export type ProductAd = {
+  /** "A" | "B" | "C" | "D" */
+  code: string;
+  /** Composition id, e.g. "KURIO-AD-A-MOON-JAR". */
+  compositionId: string;
+  /** Folder name for this ad's generated clips: public/clips/<slug>/. */
+  slug: string;
+  productName: string;
+  /** Exactly four content cuts (PRODUCT, DETAIL, MAKING, IN PLACE); the fifth is always the shared end card. */
+  scenes: [AdScene, AdScene, AdScene, AdScene];
+  /**
+   * "final": every cut has its approved image. "review": an internal review template — renders get "_INTERNAL_REVIEW"
+   * in their names and must not be used as an ad (e.g. image rights or a key scene still open).
+   */
+  status: "final" | "review";
+};
+
+/** Props of the ad compositions. `clips` is filled by calculateMetadata (which slot files exist). */
+export type AdProps = {
+  ad: ProductAd;
+  withEndCard: boolean;
+  /** Per cut: the public/ path of its generated clip, or null when the slot is empty (the still image is shown). */
+  clips?: (string | null)[];
+};
