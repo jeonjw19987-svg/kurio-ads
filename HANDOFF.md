@@ -12,7 +12,7 @@ KURIO 미국 Meta 광고(A·B·C·D) 영상 프로젝트입니다. 홈페이지 
 ## 1. 현재 상태
 | | |
 |---|---|
-| 브랜치 | `feature/meta-ad-production`. **원격 저장소가 없어 push하지 않았습니다** (§6) |
+| 브랜치 | `feature/meta-ad-production`. 비공개 GitHub 저장소에 사진째 push합니다(운영자 결정, §6) |
 | **A v4 (최신)** | `out/A-moon-jar-v4/`. 소스는 이 브랜치의 최신 커밋입니다. 기획 담당자의 검수를 기다리는 중입니다 |
 | 공통 엔드카드 | `out/shared/KURIO_ENDCARD_v4.mp4`(+ `.png`). B·C·D가 이 파일을 그대로 씁니다. v2 마스터도 보존합니다 |
 | A v3 | 태그 `ad-a-v3`. Higgsfield 클립 경로 도입, DRAFT 스틸만 있음(`out/A-moon-jar-v3/`) |
@@ -28,20 +28,17 @@ KURIO 미국 Meta 광고(A·B·C·D) 영상 프로젝트입니다. 홈페이지 
 - `KURIO_AD_A_v3_vs_v4.png`: 비교 자료
 
 ## 2. 다른 컴퓨터(회사)에서 이어서 하기
-git에 **없는** 파일이 있으니 함께 옮깁니다.
-- `public/assets/` (기획 담당자가 준비한 이미지. 권한 미확보라 git 제외)
-- 필요하면 `out/` (결과 영상)
+이미지는 모두 git에 들어 있습니다. 결과 영상(`out/`)만 git에 없으니 필요하면 따로 옮깁니다.
 
 ```powershell
-# 1) 저장소 받기 — 원격이 정해지면: git clone <원격 주소> KURIO-ADS ; 지금은 폴더째 복사
+# 1) 저장소 받기 (비공개 저장소라 GitHub 로그인 필요)
+git clone -b feature/meta-ad-production <원격 주소 — 아래 §6> KURIO-ADS
 cd KURIO-ADS
-git switch feature/meta-ad-production
-# 2) public/assets/A_moonjar/ 를 복사해 넣기 (5개 파일, 01·04는 실제 이름이 .png.png)
-# 3) 패키지 설치 (node_modules는 복사하지 말고 새로 설치)
+# 2) 패키지 설치 (node_modules는 복사하지 말고 새로 설치)
 npm ci
-# 4) 미리보기
+# 3) 미리보기
 npm run dev            # Remotion Studio → http://localhost:3000/KURIO-AD-A-MOON-JAR
-# 5) 렌더링
+# 4) 렌더링
 npm run a:stills       # 스틸 5장 + 썸네일만 (검수용, 빠름)
 npm run a:render       # + 최종 MP4 (엔드카드 v4 마스터가 없으면 한 번 새로 만듦)
 ```
@@ -61,7 +58,7 @@ src/ads/template/
 src/ads/products/a-moon-jar.ts   A 데이터: 컷별 이미지, 레이아웃, focus, 자막, 이미지 출처
 src/ads/audio.json               공통 AudioTrack (null = 무음)
 public/fonts/line-seed/          LINE Seed Sans EN V1.003 Thin, Regular, Bold (OFL)
-public/assets/A_moonjar/         v4 이미지 (git 제외)
+public/assets/A_moonjar/         v4 이미지 (기획 담당자 제공, 비공개 저장소에만)
 public/products/a-moon-jar/      와유재 원본 사진 2장 (②의 고해상도 원본)
 tools/render-ad.mjs              번들 1회 렌더링: 스틸, 썸네일, 본편, 엔드카드 연결, 클립 검사, DRAFT 표시, 오디오 합치기
 tools/watch-clips.mjs            클립 교체 시 자동 렌더링 (Higgsfield 경로)
@@ -92,9 +89,11 @@ archive/ad-a-v1/                 v1 소스
 | 결과 이름 | `…_v3_DRAFT` | `KURIO_AD_A_MOON_JAR_v4.mp4`, `KURIO_AD_A_THUMBNAIL_v4.png`, `Scene_0N` 스틸 |
 
 ## 6. Git과 push
-- 원격 저장소가 설정되어 있지 않아 push하지 않았습니다. 홈페이지 저장소(`kurio-public-web`)는 브랜치 push마다 Vercel Preview 빌드가 돌기 때문에 이 프로젝트를 올리기에 적합하지 않습니다.
-- **현재 git 기록(v2·v3 커밋)에 와유재 원본 사진 3장이 들어 있습니다** (`public/products/a-moon-jar/`, `archive/ad-a-v1/public/`). '권한이 확보된 자료만 올린다'는 원칙을 지키려면, 첫 push 전에 그 파일들을 기록에서 빼야 합니다(기록 재작성, 승인 필요). 아니면 운영자 결정으로 비공개 저장소에 올리는 것을 허용해야 합니다.
-- v4 이미지(`public/assets/`)와 영상(`out/`)은 git에서 제외했습니다.
+- **운영자 결정 (2026-11-26, "사진 포함 push"):** 이 저장소는 **비공개** GitHub 저장소에만 올립니다.
+  - 와유재 원본 사진 3장(`public/products/a-moon-jar/`, `archive/ad-a-v1/public/`)과 기획 담당자 이미지(`public/assets/A_moonjar/`, 얼굴이 나온 `03_making_original.png` 포함)를 사진째 올립니다.
+  - 사진 사용 허락은 여전히 없습니다. 저장소를 공개로 바꾸거나 외부와 공유하지 않습니다.
+- 홈페이지 저장소(`kurio-public-web`)는 브랜치 push마다 Vercel Preview 빌드가 돌아서 쓰지 않습니다.
+- 영상(`out/`)과 생성 클립(`public/clips/**/*.mp4`)은 용량 때문에 git에서 제외합니다. 필요하면 따로 옮깁니다.
 
 ## 7. 지켜야 할 것
 - 디자인 시스템 값(DESIGN_SYSTEM.md)은 상품마다 바꾸지 않습니다. 바꿔야 하면 네 편을 모두 다시 만듭니다.

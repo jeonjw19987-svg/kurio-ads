@@ -8,7 +8,3 @@ out
 
 # Generated clips (Higgsfield) are large binaries: keep them as files, not in git. The slot folders stay (.gitkeep).
 public/clips/**/*.mp4
-
-# Planner-supplied ad images (v4+): usage rights are not secured yet, so they are not committed or pushed.
-# Copy public/assets/ to another computer by hand (see HANDOFF.md §2).
-public/assets/
