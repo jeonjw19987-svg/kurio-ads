@@ -89,9 +89,11 @@ archive/ad-a-v1/                 v1 소스
 | 결과 이름 | `…_v3_DRAFT` | `KURIO_AD_A_MOON_JAR_v4.mp4`, `KURIO_AD_A_THUMBNAIL_v4.png`, `Scene_0N` 스틸 |
 
 ## 6. Git과 push
-- **운영자 결정 (2026-11-26, "사진 포함 push"):** 이 저장소는 **비공개** GitHub 저장소에만 올립니다.
-  - 와유재 원본 사진 3장(`public/products/a-moon-jar/`, `archive/ad-a-v1/public/`)과 기획 담당자 이미지(`public/assets/A_moonjar/`, 얼굴이 나온 `03_making_original.png` 포함)를 사진째 올립니다.
-  - 사진 사용 허락은 여전히 없습니다. 저장소를 공개로 바꾸거나 외부와 공유하지 않습니다.
+- **원격 저장소:** https://github.com/jeonjw19987-svg/kurio-ads — **공개(public) 저장소**입니다.
+- **운영자 결정 (2026-11-26):** "사진 포함 push"에 이어, 저장소가 공개라는 안내를 받고 "그냥 올려도 돼"라고 결정했습니다.
+  - 와유재 원본 사진 3장(`public/products/a-moon-jar/`, `archive/ad-a-v1/public/`)과 기획 담당자 이미지(`public/assets/A_moonjar/`, 작가 얼굴이 나온 `03_making_original.png` 포함)가 **공개 저장소에 올라가 있습니다**.
+  - 와유재와 작가의 사용 허락은 여전히 없습니다. 허락을 받지 못하거나 요청이 있으면 저장소를 비공개로 바꾸거나 해당 파일을 기록에서 지웁니다.
+- 커밋 작성자 이메일은 GitHub의 비공개용 주소(`…@users.noreply.github.com`)를 씁니다. 이 저장소의 `git config user.email`에 설정되어 있습니다.
 - 홈페이지 저장소(`kurio-public-web`)는 브랜치 push마다 Vercel Preview 빌드가 돌아서 쓰지 않습니다.
 - 영상(`out/`)과 생성 클립(`public/clips/**/*.mp4`)은 용량 때문에 git에서 제외합니다. 필요하면 따로 옮깁니다.
 
