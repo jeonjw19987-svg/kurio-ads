@@ -1,29 +1,35 @@
 import React from "react";
 import { AbsoluteFill, interpolate, useCurrentFrame } from "remotion";
-import { COLORS, FONT_FAMILY, GREYSCALE_TEXT, SAFE } from "./tokens";
+import { COLORS, FONT_FAMILY, GREYSCALE_TEXT, MOTION, SAFE } from "./tokens";
 
 /**
  * ⑤ END CARD — shared by every ad (A, B, C, D). No props on purpose.
- * It is rendered ONCE to out/shared/KURIO_ENDCARD_<version>.mp4 and that file is joined, without
- * re-encoding, to each ad's 12-second body (storyboard §6: "1회 제작 후 네 편에 동일 파일 삽입, 재렌더 금지").
+ * Rendered ONCE to out/shared/KURIO_ENDCARD_v4.mp4; that file is joined, without re-encoding, to each ad's
+ * 12-second body (storyboard §6: "1회 제작 후 네 편에 동일 파일 삽입, 재렌더 금지").
  *
- * Copy (planner's latest note, 2026-11-26): Curious about Korea / KURIO / Learn More.
+ * v4 (2026-11-26): v3 layout kept. CTA set in LINE Seed Sans Bold (no Medium exists); each line now rises
+ * 16 px as it appears — the same upward motion language as the captions.
+ * Copy: Curious about Korea / KURIO / Learn More.
  * Wordmark: the KURIO site's own wordmark (kurio-public-web SiteHeader.tsx) is set text — LINE Seed Sans
- * Regular, tracking 0.32em; there is no logo file. It is reproduced the same way, larger than line 1.
- * Timing: the three lines appear 0.3 s (9 frames) apart and stay fully visible to the last frame.
+ * Regular, tracking 0.32em; there is no logo file. Reproduced the same way.
+ * Timing: the three lines start 0.3 s (9 frames) apart and stay fully visible to the last frame.
+ * Learn More is a visual CTA only; the click target is set in Meta Ads Manager (no URL or QR code here).
  */
 
 const STEP = 9;
-const FADE = 5;
+const IN = 9;
+const RISE = 16;
 
 const Line: React.FC<{ index: number; children: React.ReactNode; style?: React.CSSProperties }> = ({ index, children, style }) => {
   const frame = useCurrentFrame();
   const start = index * STEP;
+  const opts = { extrapolateLeft: "clamp" as const, extrapolateRight: "clamp" as const, easing: MOTION.captionInEase };
   return (
     <div
       style={{
         ...GREYSCALE_TEXT,
-        opacity: interpolate(frame, [start, start + FADE], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }),
+        opacity: interpolate(frame, [start, start + IN], [0, 1], opts),
+        translate: `0px ${interpolate(frame, [start, start + IN], [RISE, 0], opts)}px`,
         ...style,
       }}
     >
@@ -74,8 +80,9 @@ export const EndCard: React.FC = () => (
           border: `3px solid ${COLORS.paper}`,
           padding: "30px 76px 28px",
           fontSize: 46,
+          fontWeight: 700,
           lineHeight: 1,
-          letterSpacing: "0.02em",
+          letterSpacing: "0.01em",
         }}
       >
         Learn More

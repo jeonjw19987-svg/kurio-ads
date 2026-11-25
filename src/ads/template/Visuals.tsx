@@ -1,9 +1,9 @@
 import React from "react";
 import { AbsoluteFill, Img, interpolate, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
-import { BLEED, COLORS, FONT_FAMILY, GREYSCALE_TEXT, PUSH_IN_END_SCALE, SHADOW, STAGE, VIDEO } from "./tokens";
+import { BLEED, COLORS, FONT_FAMILY, GREYSCALE_TEXT, MOTION, PLATE, SHADOW, STAGE, VIDEO } from "./tokens";
 import type { CutRole, CutVisual, Rect, Silhouette, SourceImage } from "./types";
 
-/** One very slow push-in over the whole cut, constant speed (storyboard §4). */
+/** The one camera move: a 2.5% push-in over the whole cut, easing out (tokens.ts → MOTION). */
 const PushIn: React.FC<{ origin: string; children: React.ReactNode }> = ({ origin, children }) => {
   const frame = useCurrentFrame();
   const { durationInFrames } = useVideoConfig();
@@ -13,15 +13,57 @@ const PushIn: React.FC<{ origin: string; children: React.ReactNode }> = ({ origi
     <AbsoluteFill
       style={{
         transformOrigin: origin,
-        scale: interpolate(frame, [0, durationInFrames - 1], [1, PUSH_IN_END_SCALE], {
+        scale: interpolate(frame, [0, durationInFrames - 1], [1, MOTION.pushInScale], {
           extrapolateLeft: "clamp",
           extrapolateRight: "clamp",
+          easing: MOTION.pushEase,
           output: "perceptual-scale",
         }),
       }}
     >
       {children}
     </AbsoluteFill>
+  );
+};
+
+/**
+ * v4 photo layouts. "full" covers the whole frame; "plate" covers the area below PLATE.top, bleeding off three
+ * edges, and fades in from the ground band at its top edge. The image always covers its area (never letterboxed);
+ * the push-in is centred on `focus`.
+ */
+const PhotoView: React.FC<{ layout: "full" | "plate"; image: SourceImage; crop?: Rect; focus: [number, number] }> = ({ layout, image, crop, focus }) => {
+  const c = crop ?? { x: 0, y: 0, w: image.width, h: image.height };
+  const areaTop = layout === "full" ? 0 : PLATE.top;
+  const areaW = VIDEO.width;
+  const areaH = VIDEO.height - areaTop;
+  const s = Math.max(areaW / c.w, areaH / c.h);
+  const left = (areaW - c.w * s) / 2 - c.x * s;
+  const top = (areaH - c.h * s) / 2 - c.y * s;
+  const origin = `${left + focus[0] * s}px ${top + focus[1] * s}px`;
+
+  return (
+    <>
+      <div style={{ position: "absolute", left: 0, top: areaTop, width: areaW, height: areaH, overflow: "hidden" }}>
+        <PushIn origin={origin}>
+          <Img
+            src={staticFile(image.src)}
+            style={{ position: "absolute", left, top, width: image.width * s, height: image.height * s, maxWidth: "none" }}
+          />
+        </PushIn>
+      </div>
+      {layout === "plate" ? (
+        <div
+          style={{
+            position: "absolute",
+            left: 0,
+            width: VIDEO.width,
+            top: PLATE.top - 1,
+            height: PLATE.fade + 1,
+            background: `linear-gradient(to bottom, ${COLORS.ground} 0%, rgba(244, 241, 236, 0.45) 45%, rgba(244, 241, 236, 0) 100%)`,
+          }}
+        />
+      ) : null}
+    </>
   );
 };
 
@@ -156,6 +198,8 @@ const MissingNote: React.FC<{ role: CutRole; need: string }> = ({ role, need }) 
 
 export const CutVisualView: React.FC<{ role: CutRole; visual: CutVisual }> = ({ role, visual }) => {
   switch (visual.kind) {
+    case "photo":
+      return <PhotoView layout={visual.layout} image={visual.image} crop={visual.crop} focus={visual.focus} />;
     case "cutout":
       return <CutoutStage image={visual.image} silhouette={visual.silhouette} focus={visual.focus} detail={role === "DETAIL"} />;
     case "bleed":

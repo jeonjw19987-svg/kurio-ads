@@ -29,9 +29,10 @@
     "build": "remotion bundle",
     "upgrade": "remotion upgrade",
     "lint": "eslint src && tsc",
-    "a:keyframes": "node tools/render-ad.mjs KURIO-AD-A-MOON-JAR out/A-moon-jar-v3 KURIO_AD_A_MOON_JAR_v3 --stills-only --keyframes",
-    "a:render": "node tools/render-ad.mjs KURIO-AD-A-MOON-JAR out/A-moon-jar-v3 KURIO_AD_A_MOON_JAR_v3",
-    "a:watch": "node tools/watch-clips.mjs KURIO-AD-A-MOON-JAR a-moon-jar out/A-moon-jar-v3 KURIO_AD_A_MOON_JAR_v3"
+    "a:stills": "node tools/render-ad.mjs KURIO-AD-A-MOON-JAR out/A-moon-jar-v4 KURIO_AD_A_MOON_JAR_v4 --stills-only --thumbnail=KURIO_AD_A_THUMBNAIL_v4.png",
+    "a:render": "node tools/render-ad.mjs KURIO-AD-A-MOON-JAR out/A-moon-jar-v4 KURIO_AD_A_MOON_JAR_v4 --thumbnail=KURIO_AD_A_THUMBNAIL_v4.png",
+    "a:keyframes": "node tools/render-ad.mjs KURIO-AD-A-MOON-JAR out/A-moon-jar-v4 KURIO_AD_A_MOON_JAR_v4 --stills-only --keyframes --thumbnail=KURIO_AD_A_THUMBNAIL_v4.png",
+    "a:watch": "node tools/watch-clips.mjs KURIO-AD-A-MOON-JAR a-moon-jar out/A-moon-jar-v5 KURIO_AD_A_MOON_JAR_v5"
   },
   "allowScripts": {
     "esbuild": false

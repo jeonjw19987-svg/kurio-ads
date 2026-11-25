@@ -1,17 +1,20 @@
-// Renders one KURIO ad from a single bundle (one bundle → less disk cache than repeated `npx remotion` calls).
+// Renders one KURIO ad from a single bundle (one bundle, no bundle cache → minimal disk use).
 //
-//   node tools/render-ad.mjs <compositionId> <outDir> <baseName> [--stills-only] [--keyframes]
-//                            [--endcard-version=v2] [--rebuild-endcard]
+//   node tools/render-ad.mjs <compositionId> <outDir> <baseName> [options]
+//     --stills-only            scene stills + thumbnail only (review before the MP4)
+//     --keyframes              also export Higgsfield start images (KF-<code>-0N.png)
+//     --thumbnail=<file name>  thumbnail file name (default <baseName>_THUMBNAIL.png)
+//     --endcard-version=v4     which shared end-card master to use / create (default v4)
+//     --rebuild-endcard        re-render that master (only when the end card itself changed)
 //
 // Outputs in <outDir>:
-//   stills/<baseName>_S01..S05_*.png  1080×1920, mid-cut frames (S05 = last end-card frame)
-//   <baseName>_THUMBNAIL.png          ① PRODUCT, frame 60
-//   <baseName>.mp4                    12 s body + the shared end-card master, joined without re-encoding
-//   keyframes/KF-<code>-0N.png        (--keyframes) Higgsfield start images, no caption
-// If any cut has no generated clip yet (public/clips/<slug>/0N-*.mp4), it shows its fallback visual and every
-// output name gets "_DRAFT", so a draft can never be mistaken for the final ad.
-// The end-card master lives at out/shared/KURIO_ENDCARD_<version>.mp4 and is rendered only if missing
-// (or with --rebuild-endcard), so every ad carries the byte-identical end-card stream (storyboard §6).
+//   stills/<baseName>_Scene_01_PRODUCT.png … _Scene_05_END-CARD.png   1080×1920 representative frames
+//   <thumbnail>                                                       ① PRODUCT, frame 45
+//   <baseName>.mp4                                                    12 s body + end-card master, joined without re-encoding
+// A cut is "final" when it has a generated clip (public/clips/<slug>/) or a "photo" image. If any cut is still a
+// draft visual (cut-out stage, bleed, or "photo needed"), every output name gets "_DRAFT".
+// The end-card master lives at out/shared/KURIO_ENDCARD_<version>.mp4 and is rendered only if missing, so every
+// ad carries the byte-identical end-card stream (storyboard §6). AudioTrack: src/ads/audio.json (null = silent).
 import { bundle } from "@remotion/bundler";
 import { getCompositions, renderMedia, renderStill, selectComposition } from "@remotion/renderer";
 import { execFileSync } from "node:child_process";
@@ -21,15 +24,17 @@ import path from "node:path";
 
 const [compositionId, outDir, baseNameIn, ...flags] = process.argv.slice(2);
 if (!compositionId || !outDir || !baseNameIn) {
-  console.error("usage: node tools/render-ad.mjs <compositionId> <outDir> <baseName> [--stills-only] [--keyframes] [--endcard-version=v2] [--rebuild-endcard]");
+  console.error("usage: node tools/render-ad.mjs <compositionId> <outDir> <baseName> [--stills-only] [--keyframes] [--thumbnail=<name>] [--endcard-version=v4] [--rebuild-endcard]");
   process.exit(1);
 }
+const flag = (name) => flags.find((f) => f.startsWith(`--${name}=`))?.split("=").slice(1).join("=");
 const stillsOnly = flags.includes("--stills-only");
 const keyframes = flags.includes("--keyframes");
 const rebuildEndcard = flags.includes("--rebuild-endcard");
-const endcardVersion = (flags.find((f) => f.startsWith("--endcard-version=")) ?? "--endcard-version=v2").split("=")[1];
+const endcardVersion = flag("endcard-version") ?? "v4";
 
 const root = path.resolve(import.meta.dirname, "..");
+const audio = JSON.parse(fs.readFileSync(path.join(root, "src/ads/audio.json"), "utf8"));
 const bundleDir = fs.mkdtempSync(path.join(os.tmpdir(), "kurio-ad-bundle-"));
 // Same encoder settings for body and end card, so the two streams can be joined without re-encoding.
 const VIDEO_OPTS = { codec: "h264", crf: 18, pixelFormat: "yuv420p", colorSpace: "bt709", x264Preset: "medium", muted: true };
@@ -52,14 +57,16 @@ try {
   const full = await selectComposition({ serveUrl, id: compositionId });
   const { ad, clips = [] } = full.props;
 
-  // ── Clip report ──────────────────────────────────────────────────────────────────────────────────────
-  console.log(`\nclips for ${ad.compositionId} (public/clips/${ad.slug}/):`);
-  const missing = [];
+  // ── Cut report ───────────────────────────────────────────────────────────────────────────────────────
+  console.log(`\ncuts for ${ad.compositionId}:`);
+  const drafts = [];
   ad.scenes.forEach((scene, i) => {
     const clip = clips[i];
     if (!clip) {
-      missing.push(`${i + 1} ${scene.role}`);
-      console.log(`  ${i + 1} ${scene.role.padEnd(9)} — no clip → fallback (${scene.visual.kind})`);
+      const final = scene.visual.kind === "photo";
+      if (!final) drafts.push(`${i + 1} ${scene.role}`);
+      const src = scene.visual.image?.src ?? "—";
+      console.log(`  ${i + 1} ${scene.role.padEnd(9)} — ${scene.visual.kind}${scene.visual.layout ? `/${scene.visual.layout}` : ""}  ${src}${final ? "" : "  (draft visual)"}`);
       return;
     }
     const p = probe(path.join(root, "public", clip));
@@ -68,11 +75,11 @@ try {
     if (p.duration < need) warn.push(`too short: ${p.duration.toFixed(2)} s < ${need} s`);
     if (Math.abs(p.width / p.height - 9 / 16) > 0.01) warn.push(`not 9:16 (${p.width}×${p.height}) — will be cropped to cover`);
     if (p.width < 1080) warn.push(`below 1080 wide (${p.width}) — will be upscaled`);
-    console.log(`  ${i + 1} ${scene.role.padEnd(9)} — ${clip}  ${p.width}×${p.height} ${p.fps.toFixed(2)}fps ${p.duration.toFixed(2)}s${warn.length ? "  ⚠ " + warn.join("; ") : "  ok"}`);
+    console.log(`  ${i + 1} ${scene.role.padEnd(9)} — clip ${clip}  ${p.width}×${p.height} ${p.fps.toFixed(2)}fps ${p.duration.toFixed(2)}s${warn.length ? "  ⚠ " + warn.join("; ") : "  ok"}`);
   });
-  const draft = missing.length > 0;
+  const draft = drafts.length > 0;
   const baseName = draft ? `${baseNameIn}_DRAFT` : baseNameIn;
-  if (draft) console.log(`\n⚠ DRAFT — fallback used for: ${missing.join(", ")}. Output names end in _DRAFT.\n`);
+  if (draft) console.log(`\n⚠ DRAFT — draft visuals in: ${drafts.join(", ")}. Output names end in _DRAFT.\n`);
 
   // ── Keyframes (Higgsfield start images) ──────────────────────────────────────────────────────────────
   if (keyframes) {
@@ -86,26 +93,27 @@ try {
     }
   }
 
-  // ── Stills + thumbnail ───────────────────────────────────────────────────────────────────────────────
+  // ── Representative stills + thumbnail ────────────────────────────────────────────────────────────────
   const stillsDir = path.join(outDir, "stills");
   fs.mkdirSync(stillsDir, { recursive: true });
   const shots = [
-    [60, "S01_product"],
-    [150, "S02_detail"],
-    [240, "S03_making"],
-    [330, "S04_in-place"],
-    [449, "S05_endcard"],
+    [45, "Scene_01_PRODUCT"],
+    [135, "Scene_02_DETAIL"],
+    [225, "Scene_03_MAKING"],
+    [315, "Scene_04_IN-PLACE"],
+    [449, "Scene_05_END-CARD"],
   ];
   for (const [frame, name] of shots) {
     const output = path.join(stillsDir, `${baseName}_${name}.png`);
     await renderStill({ serveUrl, composition: full, frame, output, overwrite: true });
     console.log("still", output);
   }
-  const thumb = path.join(outDir, `${baseName}_THUMBNAIL.png`);
-  await renderStill({ serveUrl, composition: full, frame: 60, output: thumb, overwrite: true });
+  const thumbName = flag("thumbnail") ?? `${baseName}_THUMBNAIL.png`;
+  const thumb = path.join(outDir, draft ? thumbName.replace(/\.png$/, "_DRAFT.png") : thumbName);
+  await renderStill({ serveUrl, composition: full, frame: 45, output: thumb, overwrite: true });
   console.log("thumbnail", thumb);
 
-  // ── Video: body + end-card master ────────────────────────────────────────────────────────────────────
+  // ── Video: body + end-card master (+ shared AudioTrack) ──────────────────────────────────────────────
   if (!stillsOnly) {
     const sharedDir = path.join(root, "out/shared");
     fs.mkdirSync(sharedDir, { recursive: true });
@@ -113,6 +121,7 @@ try {
     if (rebuildEndcard || !fs.existsSync(endcard)) {
       const ec = await selectComposition({ serveUrl, id: "KURIO-EndCard" });
       await renderMedia({ serveUrl, composition: ec, outputLocation: endcard, ...VIDEO_OPTS, overwrite: true });
+      await renderStill({ serveUrl, composition: ec, frame: ec.durationInFrames - 1, output: endcard.replace(/\.mp4$/, ".png"), overwrite: true });
       console.log("end card master rendered", endcard);
     } else {
       console.log("end card master reused (not re-rendered)", endcard);
@@ -126,7 +135,14 @@ try {
     const list = path.join(bundleDir, "concat.txt");
     fs.writeFileSync(list, [body, endcard].map((f) => `file '${path.resolve(f).replace(/\\/g, "/")}'`).join("\n"));
     const final = path.join(outDir, `${baseName}.mp4`);
-    npx(["remotion", "ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i", `"${list}"`, "-c", "copy", "-movflags", "+faststart", `"${final}"`]);
+    const joined = audio.src ? path.join(bundleDir, "joined.mp4") : final;
+    npx(["remotion", "ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i", `"${list}"`, "-c", "copy", "-movflags", "+faststart", `"${joined}"`]);
+    if (audio.src) {
+      // One shared licensed track under the whole 15 s; the video stream is copied, not re-encoded.
+      const track = path.join(root, "public", audio.src);
+      npx(["remotion", "ffmpeg", "-v", "error", "-y", "-i", `"${joined}"`, "-i", `"${track}"`, "-map", "0:v", "-map", "1:a", "-c:v", "copy", "-c:a", "aac", "-b:a", "192k", "-af", `"volume=${audio.volume}"`, "-t", "15", "-movflags", "+faststart", `"${final}"`]);
+      console.log("audio muxed", audio.src);
+    }
     fs.rmSync(body);
     console.log("final", final);
   }
