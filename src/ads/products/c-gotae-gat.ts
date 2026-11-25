@@ -3,9 +3,8 @@ import type { ProductAd } from "../template/types";
 /**
  * Ad C — GAT tableware (plate + cup, black). INTERNAL REVIEW TEMPLATE, 2026-11-26.
  *
- * ON HOLD: the storyboard makes C conditional on the brand's image permission and on how far the brand name may be
- * shown. Until both are confirmed this is a layout/copy template only: renders are named _INTERNAL_REVIEW and no MP4
- * is produced (npm run c:stills). When approval arrives: replace images if needed, set status to "final", render.
+ * Not yet approved as an ad: this is a layout/copy template only. Renders are named _INTERNAL_REVIEW and no MP4 is
+ * produced (npm run c:stills). Once approved: replace images if needed, set status to "final", render.
  *
  * Known gaps for approval day:
  * - ④ IN PLACE: no photo of the set in use on a dining table.

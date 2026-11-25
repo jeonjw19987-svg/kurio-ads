@@ -55,7 +55,7 @@ export const RemotionRoot: React.FC = () => {
       <Folder name="KURIO-Ads">
         <AdCompositions ad={adAMoonJar} />
         <AdCompositions ad={adBTraditionalGat} />
-        {/* C: internal review template only (image permission pending) — stills, no MP4. */}
+        {/* C: internal review template only (not yet approved as an ad) — stills, no MP4. */}
         <AdCompositions ad={adCGotaeGat} />
         <AdCompositions ad={adDTigerMagpie} />
         {/* Shared end card. Rendered once; the same file goes into every ad. */}
