@@ -11,9 +11,9 @@ Product images are kept outside git. Put them at these paths before rendering:
 ```
 public/assets/A_moonjar/            01_product_v4.png.png, 02_detail.png, 03_making.png, 04_in_place_v4.png.png
 public/products/a-moon-jar/         02-detail.png
-public/assets/B_traditional_gat/    01_product.jpg, 02_detail.jpg, 03_making.jpg, 04_in_place_source.jpg
-public/assets/C_gotae/              01_product.jpg, 02_detail.jpg, 03_making.jpg, 04_in_place.jpg
-public/assets/D_najeon/             01_product.jpg, 02_detail.jpg, 03_making.jpg, 04_in_place.jpg
+public/assets/B_traditional_gat/    01_product.jpg (also used by ④), 02_detail.jpg, 03_making.jpg
+public/assets/C_gotae/              01_product.jpg, 02_detail.jpg, 03_making.jpg   (④ not yet available)
+public/assets/D_najeon/             01_product.jpg, 02_detail.jpg (also used by ③), 04_in_place.jpg
 ```
 
 The exact file list and sizes are in each product file under `src/ads/products/`.
