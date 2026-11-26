@@ -22,6 +22,9 @@ import type { ProductAd } from "../template/types";
  * end card with "Shop now"); lines per the request's §5 table.
  * ① 3rd line: the request asked for "Woven from horsehair."; horsehair is not confirmed for this gat (the page lists
  * bamboo), so — operator's decision, 2026-11-26 — "Finely woven, lacquered black." (woven bamboo brim, black lacquer).
+ * SAFEZONE (2026-11-26, Meta placements Reels · Stories · Feed 4:5 crop): design "v8" — every caption from y ≈ 391.
+ * ③ the photo moves down with its caption (softTop 591 = 500 + 91), keeping the line's distance to the iron and the
+ * hands. ① ② ④: caption only (the gat starts ≥ 180 px under it; ②'s crown ring stays inside the 4:5 crop).
  */
 
 const DIR = "assets/B_traditional_gat";
@@ -37,7 +40,7 @@ export const adBTraditionalGat: ProductAd = {
   slug: "b-traditional-gat",
   productName: "Traditional Korean gat",
   status: "final",
-  design: "v7",
+  design: "v8",
   scenes: [
     {
       role: "PRODUCT",
@@ -63,7 +66,9 @@ export const adBTraditionalGat: ProductAd = {
       // cloth, not the hand at the very top (which smeared). Light field → ink caption.
       // Hands shaping the woven, still unlacquered brim with a heated iron. Same camera as every ③: 3% push-in and a
       // 16 px drift toward the hands. The brim's circle continues ②'s circular weave across the hard cut.
-      visual: { kind: "photo", layout: "soft", image: MAKING, crop: { x: 833, y: 100, w: 1370, h: 1676 }, focus: [1300, 700], pushIn: 1.03, drift: [-16, 0] },
+      // v8: softTop 591 moves the photo down with the caption (+91 px); the crop's height drops by 91 / 0.847 px so the
+      // scale stays FINAL2's ×0.847 (same size, same framing — only lower).
+      visual: { kind: "photo", layout: "soft", image: MAKING, crop: { x: 833, y: 100, w: 1370, h: 1568.6 }, focus: [1300, 700], pushIn: 1.03, drift: [-16, 0], softTop: 591 },
     },
     {
       role: "IN PLACE",

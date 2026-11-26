@@ -82,9 +82,9 @@ try {
     const clip = clips[i];
     if (!clip) {
       // "photo" = approved image in a template layout; "set" = the shared staged IN PLACE composite.
-      const final = scene.visual.kind === "photo" || scene.visual.kind === "set";
+      const final = scene.visual.kind === "photo" || scene.visual.kind === "set" || scene.visual.kind === "final2";
       if (!final) drafts.push(`${i + 1} ${scene.role}${scene.visual.need ? ` (needs: ${scene.visual.need})` : ""}`);
-      const src = scene.visual.image?.src ?? "—";
+      const src = scene.visual.image?.src ?? (scene.visual.video ? `${scene.visual.video} from frame ${scene.visual.from} (+ ${scene.visual.plate.src})` : "—");
       console.log(`  ${i + 1} ${scene.role.padEnd(9)} — ${scene.visual.kind}${scene.visual.layout ? `/${scene.visual.layout}` : ""}${scene.visual.matte ? " (matte)" : ""}  ${src}${final ? "" : "  (draft visual)"}`);
       return;
     }

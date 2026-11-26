@@ -22,6 +22,9 @@ import type { ProductAd } from "../template/types";
  * FINAL2 (2026-11-26, planner's revision request v2 — request letter C): design "v7" (one shared 66 px title,
  * end card with "Shop now"); lines per the request's §5 table.
  * ① uses the cut-out (01_product_cutout.png), made from the studio photo 01_product.png (1000 × 1029, earlier ①).
+ * SAFEZONE (2026-11-26, Meta placements Reels · Stories · Feed 4:5 crop): design "v8" — every caption from y ≈ 391.
+ * Images unchanged: ① the set already sits centred between the caption (ends y ≈ 600) and the Reels UI (1248);
+ * ②–④ keep their photos where they were (the cup, the plate and the in-use set stay inside the 4:5 crop).
  */
 
 const DIR = "assets/C_gotae";
@@ -38,7 +41,7 @@ export const adCGotaeGat: ProductAd = {
   slug: "c-gotae-gat",
   productName: "GOTAE GAT tableware",
   status: "final",
-  design: "v7",
+  design: "v8",
   scenes: [
     {
       role: "PRODUCT",

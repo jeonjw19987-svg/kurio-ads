@@ -20,6 +20,11 @@ import type { ProductAd } from "../template/types";
  * FINAL (2026-11-26, final copy review): ④ line → "A quiet beauty for your home."
  * FINAL2 (2026-11-26, planner's revision request v2 — request letter A): design "v7" (one shared 66 px title,
  * end card with "Shop now"); lines per the request's §5 table.
+ * SAFEZONE (2026-11-26, Meta placements Reels · Stories · Feed 4:5 crop): design "v8" — every caption from y ≈ 391.
+ * ① the jar moves down under the name block: the whole picture from y 45 at its full-width scale (×1.148; FINAL2's
+ * 4 % crop-in is dropped — at ×1.19 the jar no longer fits the 4:5 crop under the caption), its own plain backdrop
+ * continuing above it (soft layout). ③ the photo moves down with its caption (softTop 591 = 500 + 91), keeping the
+ * line's distance to the fingers. ② ④: caption only.
  */
 
 const DIR = "assets/A_moonjar";
@@ -36,15 +41,16 @@ export const adAMoonJar: ProductAd = {
   slug: "a-moon-jar",
   productName: "Korean moon jar",
   status: "final",
-  design: "v7",
+  design: "v8",
   scenes: [
     {
       role: "PRODUCT",
       id: "s01-product",
       caption: { title: "Korean moon jar.", subtitle: "Dalhangari.", body: ["Shaped like the moon."] },
-      // Full frame, cropped in 4% around the rim so the jar is a little larger and grows downward, never into the
-      // name block above it.
-      visual: { kind: "photo", layout: "full", image: PRODUCT, focus: [468, 500], zoom: 1.04 },
+      // v8: the whole picture at its full-width scale from y 45 (soft layout: the plain backdrop continues above it,
+      // under the top UI and outside the 4:5 crop). Rim y ≈ 650, foot ≈ 1604 (≈ 1628 at the end of the push-in) —
+      // inside the Feed crop (≤ 1635). FINAL2: full frame, cropped in 4 % around the rim.
+      visual: { kind: "photo", layout: "soft", image: PRODUCT, focus: [468, 500], softTop: 45 },
     },
     {
       role: "DETAIL",
@@ -68,10 +74,13 @@ export const adAMoonJar: ProductAd = {
         kind: "photo",
         layout: "soft",
         image: MAKING_ORIGINAL,
-        crop: { x: 724, y: 0, w: 716, h: 900 },
+        // v8: moved down with the caption (+91 px) — the same distance between the line and the fingers as in FINAL2.
+        // The crop's height drops by 91 / 1.578 px so the scale stays FINAL2's ×1.578 (same size, same framing).
+        crop: { x: 724, y: 0, w: 716, h: 842.3 },
         focus: [1180, 200],
         pushIn: 1.03,
         drift: [-16, 0],
+        softTop: 591,
       },
     },
     {

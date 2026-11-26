@@ -1,3 +1,4 @@
+import { Video } from "@remotion/media";
 import React from "react";
 import { AbsoluteFill, Img, interpolate, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
 import { COLORS, MOTION_V5, SOFT, VIDEO } from "./tokens";
@@ -38,6 +39,13 @@ const Camera: React.FC<{ origin: [number, number]; pushIn: number; drift?: [numb
   );
 };
 
+/**
+ * "soft" layers are clipped EDGE px beyond the frame's left and right edges (v8, 2026-11-26): FINAL2's ③ cuts drift
+ * 16 px sideways while pushing in, and a clip at the frame's own edge let the ground show as a 2 px line at the right
+ * edge in their last frames. Inside the frame nothing changes.
+ */
+const EDGE = 48;
+
 /** The out-of-focus field above a "soft" photo: the crop's top SOFT.edgeRows rows, stretched upward and blurred. */
 const FieldLayer: React.FC<{ image: SourceImage; crop: Rect; s: number; left: number; height: number; blur: number; margin: number; mask?: string }> = ({
   image,
@@ -57,9 +65,12 @@ const FieldLayer: React.FC<{ image: SourceImage; crop: Rect; s: number; left: nu
   // Vertical: rows [crop.y, crop.y + edgeRows] stretched over the whole field height (plus the same margin).
   const fieldH = height + margin * 2;
   const sy = fieldH / SOFT.edgeRows;
+  // The clip box reaches EDGE px past both sides of the frame, so a sideways drift never uncovers the frame's edge.
   return (
-    <div style={{ position: "absolute", left: 0, top: 0, width: VIDEO.width, height, overflow: "hidden", maskImage: mask, WebkitMaskImage: mask }}>
-      <div style={{ position: "absolute", left: x0, top: -margin, width: w, height: fieldH, overflow: "hidden", filter: `blur(${blur}px)` }}>
+    <div
+      style={{ position: "absolute", left: -EDGE, top: 0, width: VIDEO.width + 2 * EDGE, height, overflow: "hidden", maskImage: mask, WebkitMaskImage: mask }}
+    >
+      <div style={{ position: "absolute", left: x0 + EDGE, top: -margin, width: w, height: fieldH, overflow: "hidden", filter: `blur(${blur}px)` }}>
         <Img
           src={staticFile(image.src)}
           style={{ position: "absolute", left: -crop.x * sx, top: -crop.y * sy, width: image.width * sx, height: image.height * sy, maxWidth: "none" }}
@@ -74,11 +85,13 @@ const FieldLayer: React.FC<{ image: SourceImage; crop: Rect; s: number; left: nu
  * shapes continue naturally; higher up, the same rows blurred much further (SOFT.farBlur) so the area behind the
  * caption settles into a calm, even tone instead of vertical streaks.
  */
-const SoftField: React.FC<{ image: SourceImage; crop: Rect; s: number; left: number }> = (p) => {
-  const height = SOFT.top + SOFT.dissolve;
-  const far = `linear-gradient(to bottom, #000 0px, #000 ${SOFT.farUntil}px, rgba(0,0,0,0) ${SOFT.top}px)`;
+const SoftField: React.FC<{ image: SourceImage; crop: Rect; s: number; left: number; photoTop: number }> = ({ photoTop, ...p }) => {
+  const height = photoTop + SOFT.dissolve;
+  // The far blur takes over the same distance above the photo as in v5 (SOFT.top − SOFT.farUntil), wherever it starts.
+  const farUntil = photoTop - (SOFT.top - SOFT.farUntil);
+  const far = `linear-gradient(to bottom, #000 0px, #000 ${farUntil}px, rgba(0,0,0,0) ${photoTop}px)`;
   // Grain only over the field, fading out where the (naturally grainy) photo takes over.
-  const grainMask = `linear-gradient(to bottom, #000 0px, #000 ${SOFT.top}px, rgba(0,0,0,0) ${height}px)`;
+  const grainMask = `linear-gradient(to bottom, #000 0px, #000 ${photoTop}px, rgba(0,0,0,0) ${height}px)`;
   return (
     <>
       <FieldLayer {...p} height={height} blur={SOFT.blur} margin={90} />
@@ -113,23 +126,25 @@ const PhotoV5: React.FC<{ visual: Extract<CutVisual, { kind: "photo" }> }> = ({ 
   const pushIn = visual.pushIn ?? MOTION_V5.pushInScale;
 
   if (layout === "soft") {
-    const areaH = VIDEO.height - SOFT.top;
+    // v8: a cut may set its own photo top (softTop); the field above and the dissolve move with it.
+    const photoTop = visual.softTop ?? SOFT.top;
+    const areaH = VIDEO.height - photoTop;
     const s = Math.max(VIDEO.width / c.w, areaH / c.h);
     const left = (VIDEO.width - c.w * s) / 2 - c.x * s;
-    const top = SOFT.top - c.y * s;
+    const top = photoTop - c.y * s;
     const origin: [number, number] = [left + focus[0] * s, top + focus[1] * s];
     const mask = `linear-gradient(to bottom, rgba(0,0,0,0) 0px, rgba(0,0,0,0.5) ${SOFT.dissolve * 0.45}px, #000 ${SOFT.dissolve}px)`;
     return (
       <AbsoluteFill style={{ overflow: "hidden" }}>
         <Camera origin={origin} pushIn={pushIn} drift={visual.drift}>
-          <SoftField image={image} crop={c} s={s} left={left} />
+          <SoftField image={image} crop={c} s={s} left={left} photoTop={photoTop} />
           <div
             style={{
               position: "absolute",
-              left: 0,
-              top: SOFT.top,
-              width: VIDEO.width,
-              height: VIDEO.height - SOFT.top + 120,
+              left: -EDGE,
+              top: photoTop,
+              width: VIDEO.width + 2 * EDGE,
+              height: VIDEO.height - photoTop + 120,
               overflow: "hidden",
               maskImage: mask,
               WebkitMaskImage: mask,
@@ -137,7 +152,7 @@ const PhotoV5: React.FC<{ visual: Extract<CutVisual, { kind: "photo" }> }> = ({ 
           >
             <Img
               src={staticFile(image.src)}
-              style={{ position: "absolute", left, top: top - SOFT.top, width: image.width * s, height: image.height * s, maxWidth: "none" }}
+              style={{ position: "absolute", left: left + EDGE, top: top - photoTop, width: image.width * s, height: image.height * s, maxWidth: "none" }}
             />
           </div>
         </Camera>
@@ -183,9 +198,45 @@ const CutoutV5: React.FC<{ visual: Extract<CutVisual, { kind: "photo" }> }> = ({
   );
 };
 
+/**
+ * v8 "final2" cut (types.ts): FINAL2's own frames, moved down `shift` px, with the clean first frame through FINAL2's
+ * camera over the old caption area (and the band above `shift`, and the right edge where a drift would uncover it).
+ */
+const PATCH_FEATHER = 60;
+const Final2Cut: React.FC<{ visual: Extract<CutVisual, { kind: "final2" }> }> = ({ visual }) => {
+  const shift = visual.shift ?? 0;
+  const end = visual.patchUntil + shift;
+  const frame: Rect = { x: 0, y: 0, w: VIDEO.width, h: VIDEO.height };
+  const clean: Extract<CutVisual, { kind: "photo" }> = {
+    kind: "photo",
+    layout: shift ? "soft" : "full",
+    image: visual.plate,
+    crop: frame,
+    focus: visual.focus,
+    pushIn: visual.pushIn,
+    drift: visual.drift,
+    softTop: shift || undefined,
+  };
+  const top = `linear-gradient(to bottom, #000 0px, #000 ${end - PATCH_FEATHER}px, rgba(0,0,0,0) ${end}px)`;
+  // A sideways drift: the clean layer (wider than the frame) also takes the frame's last 6 px on the right.
+  const edge = visual.drift && visual.drift[0] !== 0 ? `, linear-gradient(to left, #000 0px, #000 6px, rgba(0,0,0,0) 10px)` : "";
+  return (
+    <AbsoluteFill style={{ overflow: "hidden" }}>
+      <div style={{ position: "absolute", left: 0, top: shift, width: VIDEO.width, height: VIDEO.height }}>
+        <Video src={staticFile(visual.video)} muted trimBefore={visual.from} style={{ width: VIDEO.width, height: VIDEO.height }} />
+      </div>
+      <AbsoluteFill style={{ maskImage: top + edge, WebkitMaskImage: top + edge }}>
+        <PhotoV5 visual={clean} />
+      </AbsoluteFill>
+    </AbsoluteFill>
+  );
+};
+
 /** v5 cut visual: photos use the v5 layouts (v7: cut-outs too); any other kind (set, draft, missing) falls back to the v4 view. */
 export const CutVisualViewV5: React.FC<{ role: CutRole; visual: CutVisual }> = ({ role, visual }) =>
-  visual.kind === "photo" && visual.cutout ? (
+  visual.kind === "final2" ? (
+    <Final2Cut visual={visual} />
+  ) : visual.kind === "photo" && visual.cutout ? (
     <CutoutV5 visual={visual} />
   ) : visual.kind === "photo" && !visual.matte && !visual.placement ? (
     <PhotoV5 visual={visual} />

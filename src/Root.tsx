@@ -4,6 +4,7 @@ import { adBTraditionalGat } from "./ads/products/b-traditional-gat";
 import { adCGotaeGat, adCGotaeGatRoom } from "./ads/products/c-gotae-gat";
 import { adDTigerMagpie } from "./ads/products/d-tiger-magpie";
 import { adEGatClock } from "./ads/products/e-gat-clock";
+import { SAFEZONE_ADS } from "./ads/products/safezone";
 import { EndCard } from "./ads/template/EndCard";
 import { EndCardV5, EndCardV6 } from "./ads/template/EndCardV5";
 import { ProductAdVideo, resolveClips } from "./ads/template/ProductAdVideo";
@@ -51,9 +52,37 @@ const AdCompositions: React.FC<{ ad: ProductAd }> = ({ ad }) => (
   </Folder>
 );
 
+/** SAFEZONE delivery (src/ads/products/safezone.ts): full preview and the 12 s body only — no keyframes. */
+const SafeZoneCompositions: React.FC<{ ad: ProductAd }> = ({ ad }) => (
+  <>
+    <Composition
+      id={ad.compositionId}
+      component={ProductAdVideo}
+      defaultProps={{ ad, withEndCard: true }}
+      calculateMetadata={resolveClips}
+      durationInFrames={cut * VIDEO.sceneCount}
+      {...size}
+    />
+    <Composition
+      id={`${ad.compositionId}-BODY`}
+      component={ProductAdVideo}
+      defaultProps={{ ad, withEndCard: false }}
+      calculateMetadata={resolveClips}
+      durationInFrames={cut * 4}
+      {...size}
+    />
+  </>
+);
+
 export const RemotionRoot: React.FC = () => {
   return (
     <>
+      {/* SAFEZONE (2026-11-26): A–D for every Meta placement — Reels, Stories, Feed 4:5. */}
+      <Folder name="SAFEZONE">
+        {SAFEZONE_ADS.map((ad) => (
+          <SafeZoneCompositions key={ad.compositionId} ad={ad} />
+        ))}
+      </Folder>
       <Folder name="KURIO-Ads">
         <AdCompositions ad={adAMoonJar} />
         <AdCompositions ad={adBTraditionalGat} />

@@ -309,3 +309,26 @@ export const END_V6 = {
   ctaBorder: 2,
 } as const;
 
+
+// ══ v8 (2026-11-26) — one layout for every Meta placement (Reels · Stories · Feed 4:5) ══════════════════════════
+// The 9:16 master is shown three ways. Reels and Stories lay their UI over the frame; Feed shows a 4:5 centre crop
+// (1080 × 1350 = y 285–1635 of the master). Figures follow Meta's published safe-zone guidance and are an
+// approximation of the apps' UI — the final check is the Ads Manager preview.
+export const PLACEMENTS = {
+  /** Feed: 4:5 centre crop of the 1080 × 1920 master. */
+  feedCrop: { top: 285, bottom: 1635 },
+  /** Reels: top 14 % (status, "Reels"), bottom 35 % (account, caption, CTA), action column on the right. */
+  reels: { top: 270, bottom: 1248, actionsLeft: 936, actionsTop: 1000 },
+  /** Stories: progress bar and account on top, reply / CTA at the bottom. */
+  stories: { top: 250, bottom: 1580 },
+} as const;
+
+/**
+ * v8 caption block: one position for every cut, ① included. The first line's letters start at y ≈ 391 (block top
+ * 375 + the line's half-leading) — 106 px inside the Feed crop, 120 px below the Reels top UI, 140 px below Stories'.
+ * The tallest block (①: name, romanised name, one fact) ends at y ≈ 600, far above the Reels UI (1248); left/right
+ * 88 px. Type, sizes, colours and motion are v7's. (v7: ① block at 214 — the name fell outside the 4:5 crop — and
+ * ②–④ at 284, on the crop's edge: +161 px for ①, +91 px for ②–④.)
+ * Where a picture met the old caption position, the cut moves the picture with it (product data: "soft" + softTop).
+ */
+export const CAPTION_V8 = { ...CAPTION, top: 375 } as const;

@@ -21,7 +21,7 @@ import type { AdProps } from "./types";
 export const ProductAdVideo: React.FC<AdProps> = ({ ad, withEndCard, clips }) => {
   const cut = VIDEO.sceneFrames;
   // v5, v6 and v7 share motion and sound; v6 changes the content type, v7 the title size and the end card (CTA).
-  const v5 = ad.design === "v5" || ad.design === "v6" || ad.design === "v7";
+  const v5 = ad.design === "v5" || ad.design === "v6" || ad.design === "v7" || ad.design === "v8";
   return (
     <AbsoluteFill style={{ backgroundColor: COLORS.ground }}>
       {/* v5: the shared sound (src/ads/sound.json). v4: src/ads/audio.json (null = silent). */}
@@ -34,7 +34,7 @@ export const ProductAdVideo: React.FC<AdProps> = ({ ad, withEndCard, clips }) =>
       ))}
       {withEndCard ? (
         <Sequence name="5 END CARD" from={4 * cut} durationInFrames={cut}>
-          {ad.design === "v7" ? <EndCardV6 /> : v5 ? <EndCardV5 /> : <EndCard />}
+          {ad.design === "v7" || ad.design === "v8" ? <EndCardV6 /> : v5 ? <EndCardV5 /> : <EndCard />}
         </Sequence>
       ) : null}
     </AbsoluteFill>

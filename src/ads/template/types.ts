@@ -53,6 +53,8 @@ export type CutVisual =
       drift?: [number, number];
       /** v5: push-in amount for this cut (default MOTION_V5.pushInScale, 2.5%). */
       pushIn?: number;
+      /** v8, "soft" only: the photo's top on screen (px; default SOFT.top). The field above it moves with it. */
+      softTop?: number;
       /** v7: the image has its own alpha (a cut-out, e.g. tools/composite/c-cutout.mjs); drawn as is on COLORS.ground at `placement`. */
       cutout?: boolean;
     }
@@ -76,7 +78,27 @@ export type CutVisual =
   /** v2/v3 drafts: photo from the top edge fading into the ground. */
   | { kind: "bleed"; image: SourceImage; crop: Rect }
   /** No cleared material yet: a plain "photo needed" note, so a gap is never hidden. */
-  | { kind: "missing"; need: string };
+  | { kind: "missing"; need: string }
+  /**
+   * v8 SAFEZONE, for a cut whose source image is not on this computer: the cut's frames from the FINAL2 master,
+   * frame for frame (picture, detail and camera exactly as delivered), moved down `shift` px. Above `patchUntil`
+   * (FINAL2 frame px: its old caption with the rise-in and the halo) the cut's clean first frame (`plate`) is shown
+   * through FINAL2's camera instead, feathering into the FINAL2 frames over 60 px — the out-of-focus field or plain
+   * ground there; it also fills the band uncovered by `shift` and, for a sideways drift, the frame's right edge.
+   */
+  | {
+      kind: "final2";
+      /** FINAL2 master in public/ and the cut's first frame in it. */
+      video: string;
+      from: number;
+      plate: SourceImage;
+      /** FINAL2's push-in origin on screen (px), amount and drift. */
+      focus: [number, number];
+      pushIn?: number;
+      drift?: [number, number];
+      shift?: number;
+      patchUntil: number;
+    };
 
 export type AdScene = {
   role: CutRole;
@@ -118,7 +140,8 @@ export type ProductAd = {
    * the shared v5 sound. Switch an ad only together with its review; all four should end on the same version.
    */
   // "v6" = v5 with SUIT content typography (TYPE_V6) and the ① caption block raised (CAPTION_V6).
-  design?: "v4" | "v5" | "v6" | "v7";
+  // "v8" = v7 with one caption position for every Meta placement (CAPTION_V8, tokens.ts → PLACEMENTS).
+  design?: "v4" | "v5" | "v6" | "v7" | "v8";
 };
 
 /** Props of the ad compositions. `clips` is filled by calculateMetadata (which slot files exist). */

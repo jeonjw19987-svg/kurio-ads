@@ -86,3 +86,27 @@ A video file at `public/clips/<slug>/01-product.mp4` … `04-in-place.mp4` repla
 ## Choosing source images
 `node tools/contact-sheet.mjs <out.png> "<title>" <folder> [cols]` puts every image of a folder (long detail-page strips cut into
 squares) on one sheet with file names and sizes. Working images are made from the originals by crop and downscale only.
+
+## SAFEZONE (design v8, 2026-11-26)
+Delivered as `out/SAFEZONE/KURIO_AD_<A_MOON_JAR|B_TRADITIONAL_GAT|C_GOTAE_GAT|D_TIGER_MAGPIE|E_GAT_WALL_CLOCK>_SAFEZONE.mp4`.
+Design rules: DESIGN_SYSTEM.md → v8.
+
+```bash
+npm run a:render          # … e:render. A–D render the "-SZ" compositions (src/ads/products/safezone.ts), E its own
+npm run safezone:sheets   # Reels · Stories · Feed 4:5 sheets and 4:5 crops in out/SAFEZONE/preview, MP4s copied to out/SAFEZONE
+```
+
+FINAL2 (A–D) was rendered on another computer. On this one only A's ① ② ④ sources exist, so every other A–D cut is a
+"final2" cut: FINAL2's own frames of that cut, frame for frame, with FINAL2's old caption area covered by the cut's clean
+first frame moving through FINAL2's camera. These need, outside git:
+
+```
+public/assets/SAFEZONE_final2/   FINAL2_A_moon_jar.mp4, FINAL2_B_traditional_gat.mp4, FINAL2_C_gotae.mp4, FINAL2_D_tiger_magpie.mp4
+                                 (FINAL2's *_SILENT.mp4 masters; FINAL2's own letters: B = the plate, D = the gat)
+public/assets/SAFEZONE_plates/   npm run composite:safezone-plates -- <FINAL2 _render folder>
+out/shared/KURIO_ENDCARD_v6_FINAL2.mp4
+                                 FINAL2's end card, cut by stream copy:
+                                 npx remotion ffmpeg -ss 12 -i <FINAL2 A>.mp4 -map 0:v -c:v copy -frames:v 90 out/shared/KURIO_ENDCARD_v6_FINAL2.mp4
+```
+
+On a computer with the original images, the product files (`a-moon-jar.ts` …) hold the same v8 layout on the sources.

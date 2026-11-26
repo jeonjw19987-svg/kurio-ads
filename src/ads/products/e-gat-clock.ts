@@ -30,6 +30,9 @@ import type { ProductAd } from "../template/types";
  * 07_room_original.png; 07_room.png is the same image with the caption its generator baked in removed
  * (tools/composite/e-room.mjs, npm run composite:e-room), because the template draws that caption itself.
  * No price, maker name, warranty or museum affiliation claim. Image permission: none (owner's decision, as A–D).
+ * SAFEZONE (2026-11-26, Meta placements Reels · Stories · Feed 4:5 crop, as A–D): design "v8" — every caption from
+ * y ≈ 391. ① the clock moves down 170 px under the name block, same size (disc y ≈ 670–1450, inside the 4:5 crop);
+ * ② ③ ④: caption only.
  */
 
 const DIR = "assets/E_gat_clock";
@@ -46,15 +49,15 @@ export const adEGatClock: ProductAd = {
   slug: "e-gat-clock",
   productName: "GAT Wall Clock",
   status: "final",
-  design: "v7",
+  design: "v8",
   scenes: [
     {
       role: "PRODUCT",
       id: "s01-product",
       caption: { title: "Korean gat wall clock.", subtitle: "Gat.", body: ["A hat that tells time."] },
-      // The clock on KURIO's ground, ×1.1: the disc ~770 px wide, centred, its middle near y 920 — below the caption
-      // block, the disc's lower edge above the Reels UI (y 1248); only its soft shadow continues below.
-      visual: { kind: "photo", layout: "full", image: CUTOUT, cutout: true, placement: { scale: 1.1, left: -226, top: 75 }, focus: [696, 720] },
+      // The clock on KURIO's ground, ×1.1: the disc ~770 px wide, centred. v8: 170 px lower (top 75 → 245), under the
+      // caption block that now ends at y ≈ 600 — clock y ≈ 670–1450, inside the 4:5 crop (FINAL2: middle near y 920).
+      visual: { kind: "photo", layout: "full", image: CUTOUT, cutout: true, placement: { scale: 1.1, left: -226, top: 245 }, focus: [696, 720] },
     },
     {
       role: "DETAIL",

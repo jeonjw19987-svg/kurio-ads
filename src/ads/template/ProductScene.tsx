@@ -3,7 +3,7 @@ import React from "react";
 import { AbsoluteFill, staticFile, useVideoConfig } from "remotion";
 import { Caption } from "./Caption";
 import { CaptionV5 } from "./CaptionV5";
-import { CAPTION_V6, COLORS, TYPE_V5, TYPE_V6, TYPE_V7, VIDEO } from "./tokens";
+import { CAPTION_V6, CAPTION_V8, COLORS, TYPE_V5, TYPE_V6, TYPE_V7, VIDEO } from "./tokens";
 import type { AdScene, ProductAd } from "./types";
 import { CutVisualView } from "./Visuals";
 import { CutVisualViewV5 } from "./VisualsV5";
@@ -27,18 +27,19 @@ const ClipView: React.FC<{ src: string; trimSec: number }> = ({ src, trimSec }) 
 
 /** One content cut: the clip if its slot has a file, otherwise the still image; then the caption. */
 export const ProductScene: React.FC<{ scene: AdScene; clip: string | null; design?: ProductAd["design"] }> = ({ scene, clip, design = "v4" }) =>
-  design === "v5" || design === "v6" || design === "v7" ? (
+  design === "v5" || design === "v6" || design === "v7" || design === "v8" ? (
     <AbsoluteFill style={{ backgroundColor: COLORS.ground }}>
       {clip ? <ClipView src={clip} trimSec={scene.clipTrimSec ?? 0} /> : <CutVisualViewV5 role={scene.role} visual={scene.visual} />}
-      {/* v6: SUIT content type (TYPE_V6) and the ① block raised (CAPTION_V6). v7: TYPE_V7 (one shared 66 px title). */}
+      {/* v6: SUIT content type (TYPE_V6) and the ① block raised (CAPTION_V6). v7: TYPE_V7 (one shared 66 px title).
+          v8: v7 type, every cut's block at CAPTION_V8.top (inside Reels, Stories and the Feed 4:5 crop). */}
       <CaptionV5
         title={scene.caption.title}
         subtitle={scene.caption.subtitle}
         body={scene.caption.body}
         tone={scene.caption.tone}
         isFirstCut={scene.role === "PRODUCT"}
-        type={design === "v7" ? TYPE_V7 : design === "v6" ? TYPE_V6 : TYPE_V5}
-        top={(design === "v6" || design === "v7") && scene.role === "PRODUCT" ? CAPTION_V6.firstCutTop : CAPTION_V6.top}
+        type={design === "v7" || design === "v8" ? TYPE_V7 : design === "v6" ? TYPE_V6 : TYPE_V5}
+        top={design === "v8" ? CAPTION_V8.top : (design === "v6" || design === "v7") && scene.role === "PRODUCT" ? CAPTION_V6.firstCutTop : CAPTION_V6.top}
       />
     </AbsoluteFill>
   ) : (

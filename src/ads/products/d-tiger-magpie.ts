@@ -25,6 +25,11 @@ import type { ProductAd } from "../template/types";
  * bad luck, the magpie brings good news (길상과 수호).
  * FINAL2 (2026-11-26, planner's revision request v2 — request letter B): design "v7" (one shared 66 px title,
  * end card with "Shop now"); lines per the request's §5 table.
+ * SAFEZONE (2026-11-26, Meta placements Reels · Stories · Feed 4:5 crop): design "v8" — every caption from y ≈ 391.
+ * ① the plate moves down 90 px under the name block: the whole picture from y 90 at its own size (soft layout — the
+ * plain light ground continues above it, under the top UI and outside the 4:5 crop); the stand stays inside the crop.
+ * ③ the photo moves down with its caption (softTop 591 = 500 + 91), so the line keeps its calm black field.
+ * ② ④: caption only.
  */
 
 const DIR = "assets/D_najeon";
@@ -39,15 +44,15 @@ export const adDTigerMagpie: ProductAd = {
   slug: "d-tiger-magpie",
   productName: "Tiger & Magpie mother-of-pearl plate",
   status: "final",
-  design: "v7",
+  design: "v8",
   scenes: [
     {
       role: "PRODUCT",
       id: "s01-product",
       caption: { title: "Korean mother-of-pearl plate.", subtitle: "Najeonchilgi.", body: ["A tiger and a magpie."] },
-      // Already 9:16 with a plain light ground above the plate → full frame; the name block sits on the ground and the
-      // plate starts below it.
-      visual: { kind: "photo", layout: "full", image: HERO, focus: [552, 950] },
+      // Already 9:16 with a plain light ground above the plate; the name block sits on the ground and the plate starts
+      // below it. v8: the whole picture from y 90 at ×1 (soft layout; FINAL2: full frame from y 0).
+      visual: { kind: "photo", layout: "soft", image: HERO, focus: [552, 950], softTop: 90 },
     },
     {
       role: "DETAIL",
@@ -65,7 +70,7 @@ export const adDTigerMagpie: ProductAd = {
       caption: { body: ["The art of mother-of-pearl inlay."], tone: "paper" },
       // Soft from the image's top: the black lacquer continues behind the caption (white caption), the tool and the
       // inlay below it. Same camera as every ③ (3% push-in, 16 px drift), centred on the tool's tip.
-      visual: { kind: "photo", layout: "soft", image: INLAY, crop: { x: 0, y: 0, w: 941, h: 1237 }, focus: [525, 990], pushIn: 1.03, drift: [-16, 0] },
+      visual: { kind: "photo", layout: "soft", image: INLAY, crop: { x: 0, y: 0, w: 941, h: 1237 }, focus: [525, 990], pushIn: 1.03, drift: [-16, 0], softTop: 591 },
     },
     {
       role: "IN PLACE",
