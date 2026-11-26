@@ -18,7 +18,7 @@ const ADS = [
   "out/A-moon-jar-v6/KURIO_AD_A_MOON_JAR_v6",
   "out/B-traditional-gat-v1/KURIO_AD_B_TRADITIONAL_GAT_v1",
   "out/C-gotae-gat-v1/KURIO_AD_C_GOTAE_GAT_v1",
-  "out/D-tiger-magpie-v1/KURIO_AD_D_TIGER_MAGPIE_v1",
+  "out/D-tiger-magpie-v2/KURIO_AD_D_TIGER_MAGPIE_v2",
 ];
 const npx = (args) => execFileSync("npx", args, { cwd: root, encoding: "utf8", shell: true, stdio: ["ignore", "pipe", "pipe"] });
 
