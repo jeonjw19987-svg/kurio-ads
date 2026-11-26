@@ -4,7 +4,7 @@ import { adBTraditionalGat } from "./ads/products/b-traditional-gat";
 import { adCGotaeGat, adCGotaeGatRoom } from "./ads/products/c-gotae-gat";
 import { adDTigerMagpie } from "./ads/products/d-tiger-magpie";
 import { EndCard } from "./ads/template/EndCard";
-import { EndCardV5 } from "./ads/template/EndCardV5";
+import { EndCardV5, EndCardV6 } from "./ads/template/EndCardV5";
 import { ProductAdVideo, resolveClips } from "./ads/template/ProductAdVideo";
 import { KeyframeScene } from "./ads/template/ProductScene";
 import { VIDEO } from "./ads/template/tokens";
@@ -62,6 +62,8 @@ export const RemotionRoot: React.FC = () => {
         <Composition id="KURIO-EndCard" component={EndCard} durationInFrames={cut} {...size} />
         {/* v5 shared end card (black; tagline, then wordmark). Rendered once as out/shared/KURIO_ENDCARD_v5.mp4. */}
         <Composition id="KURIO-EndCard-v5" component={EndCardV5} durationInFrames={cut} {...size} />
+        {/* v6 shared end card (design v7): v5 + "Shop now". Rendered once as out/shared/KURIO_ENDCARD_v6.mp4. */}
+        <Composition id="KURIO-EndCard-v6" component={EndCardV6} durationInFrames={cut} {...size} />
         {/* Review only: C with GOTAE's room photo as ④ (sharp, not in use), for the planner to compare. Not an ad. */}
         <Composition
           id={adCGotaeGatRoom.compositionId}

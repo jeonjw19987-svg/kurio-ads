@@ -1,7 +1,7 @@
 import React from "react";
 import { AbsoluteFill, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
 import { KurioWordmark } from "./KurioWordmark";
-import { COLORS_V5, END_V5, FONT_FAMILY, GREYSCALE_TEXT, MOTION_V5 } from "./tokens";
+import { COLORS_V5, END_V5, END_V6, FONT_FAMILY, GREYSCALE_TEXT, MOTION_V5 } from "./tokens";
 
 const clamp = { extrapolateLeft: "clamp" as const, extrapolateRight: "clamp" as const };
 
@@ -14,7 +14,7 @@ const clamp = { extrapolateLeft: "clamp" as const, extrapolateRight: "clamp" as 
  * No button: the clickable CTA is set in Meta Ads Manager. The signature sound at 13.5 s is in the shared
  * sound track (tools/compose-sound.mjs), timed to `END_V5.markIn`.
  */
-export const EndCardV5: React.FC = () => {
+export const EndCardV5: React.FC<{ cta?: string }> = ({ cta }) => {
   const frame = useCurrentFrame();
   const { durationInFrames } = useVideoConfig();
   // A one-frame still (e.g. a thumbnail) shows the final state: the wordmark.
@@ -27,6 +27,9 @@ export const EndCardV5: React.FC = () => {
 
   const m = interpolate(f, [END_V5.markIn, END_V5.markIn + END_V5.markInFrames], [0, 1], { ...clamp, easing: MOTION_V5.captionInEase });
   const tracking = END_V5.markTrackingFrom + (END_V5.markTracking - END_V5.markTrackingFrom) * m;
+
+  // v6: the CTA button rises in 0.3 s after the wordmark (END_V6), then holds.
+  const c = cta ? interpolate(f, [END_V6.ctaIn, END_V6.ctaIn + END_V6.ctaInFrames], [0, 1], { ...clamp, easing: MOTION_V5.captionInEase }) : 0;
 
   const centred: React.CSSProperties = {
     ...GREYSCALE_TEXT,
@@ -52,6 +55,30 @@ export const EndCardV5: React.FC = () => {
           <KurioWordmark size={END_V5.markSize} color={COLORS_V5.paper} tracking={tracking} />
         </div>
       ) : null}
+      {cta && c > 0 ? (
+        <div style={{ ...centred, top: END_V6.ctaTop, opacity: c, translate: `0px ${(1 - c) * END_V6.ctaRise}px` }}>
+          <div
+            style={{
+              fontFamily: FONT_FAMILY,
+              fontWeight: 400,
+              fontSize: END_V6.ctaSize,
+              lineHeight: 1,
+              letterSpacing: END_V6.ctaTracking,
+              color: COLORS_V5.paper,
+              border: `${END_V6.ctaBorder}px solid ${COLORS_V5.paper}`,
+              padding: `${END_V6.ctaPadY}px ${END_V6.ctaPadX}px`,
+            }}
+          >
+            {cta}
+          </div>
+        </div>
+      ) : null}
     </AbsoluteFill>
   );
 };
+
+/**
+ * ⑤ END CARD v6 — design "v7" (revision request §4): the v5 card plus a white outline "Shop now" button centred under
+ * the wordmark. No props: one master (out/shared/KURIO_ENDCARD_v6.mp4), joined unchanged to every ad.
+ */
+export const EndCardV6: React.FC = () => <EndCardV5 cta={END_V6.cta} />;

@@ -1,9 +1,9 @@
 import React from "react";
 import { interpolate, useCurrentFrame, useVideoConfig } from "remotion";
-import { CAPTION, GREYSCALE_TEXT, MOTION_V5, TYPE_V5, TYPE_V6 } from "./tokens";
+import { CAPTION, GREYSCALE_TEXT, MOTION_V5, TYPE_V5, TYPE_V6, TYPE_V7 } from "./tokens";
 
-/** A caption typography set (TYPE_V5 or TYPE_V6): title / subtitle / body styles, gaps and tones. */
-type TypeSet = typeof TYPE_V5 | typeof TYPE_V6;
+/** A caption typography set (TYPE_V5, TYPE_V6 or TYPE_V7): title / subtitle / body styles, gaps and tones. */
+type TypeSet = typeof TYPE_V5 | typeof TYPE_V6 | typeof TYPE_V7;
 
 const clamp = { extrapolateLeft: "clamp" as const, extrapolateRight: "clamp" as const };
 

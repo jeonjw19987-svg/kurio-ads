@@ -3,7 +3,7 @@ import React from "react";
 import { AbsoluteFill, CalculateMetadataFunction, Sequence, staticFile } from "remotion";
 import audio from "../audio.json";
 import { EndCard } from "./EndCard";
-import { EndCardV5 } from "./EndCardV5";
+import { EndCardV5, EndCardV6 } from "./EndCardV5";
 import { ProductScene } from "./ProductScene";
 import { SharedSound } from "./SharedSound";
 import { clipPath, COLORS, VIDEO } from "./tokens";
@@ -20,8 +20,8 @@ import type { AdProps } from "./types";
  */
 export const ProductAdVideo: React.FC<AdProps> = ({ ad, withEndCard, clips }) => {
   const cut = VIDEO.sceneFrames;
-  // v5 and v6 share images, motion, end card and sound; v6 only changes the content typography.
-  const v5 = ad.design === "v5" || ad.design === "v6";
+  // v5, v6 and v7 share motion and sound; v6 changes the content type, v7 the title size and the end card (CTA).
+  const v5 = ad.design === "v5" || ad.design === "v6" || ad.design === "v7";
   return (
     <AbsoluteFill style={{ backgroundColor: COLORS.ground }}>
       {/* v5: the shared sound (src/ads/sound.json). v4: src/ads/audio.json (null = silent). */}
@@ -34,7 +34,7 @@ export const ProductAdVideo: React.FC<AdProps> = ({ ad, withEndCard, clips }) =>
       ))}
       {withEndCard ? (
         <Sequence name="5 END CARD" from={4 * cut} durationInFrames={cut}>
-          {v5 ? <EndCardV5 /> : <EndCard />}
+          {ad.design === "v7" ? <EndCardV6 /> : v5 ? <EndCardV5 /> : <EndCard />}
         </Sequence>
       ) : null}
     </AbsoluteFill>

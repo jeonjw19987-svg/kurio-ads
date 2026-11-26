@@ -53,6 +53,8 @@ export type CutVisual =
       drift?: [number, number];
       /** v5: push-in amount for this cut (default MOTION_V5.pushInScale, 2.5%). */
       pushIn?: number;
+      /** v7: the image has its own alpha (a cut-out, e.g. tools/composite/c-cutout.mjs); drawn as is on COLORS.ground at `placement`. */
+      cutout?: boolean;
     }
   /**
    * IN PLACE composite for a product with no photo of itself in a room: the shared set (tokens.ts → SET) with the
@@ -116,7 +118,7 @@ export type ProductAd = {
    * the shared v5 sound. Switch an ad only together with its review; all four should end on the same version.
    */
   // "v6" = v5 with SUIT content typography (TYPE_V6) and the ① caption block raised (CAPTION_V6).
-  design?: "v4" | "v5" | "v6";
+  design?: "v4" | "v5" | "v6" | "v7";
 };
 
 /** Props of the ad compositions. `clips` is filled by calculateMetadata (which slot files exist). */

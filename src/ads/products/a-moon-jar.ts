@@ -18,6 +18,8 @@ import type { ProductAd } from "../template/types";
  * ① and ④ (the planner's files) carry C2PA content credentials: created with ChatGPT (gpt-image) — AI-generated
  * images of a moon jar, not photographs of this jar. ② and ③ are the store's own photos.
  * FINAL (2026-11-26, final copy review): ④ line → "A quiet beauty for your home."
+ * FINAL2 (2026-11-26, planner's revision request v2 — request letter A): design "v7" (one shared 66 px title,
+ * end card with "Shop now"); lines per the request's §5 table.
  */
 
 const DIR = "assets/A_moonjar";
@@ -34,7 +36,7 @@ export const adAMoonJar: ProductAd = {
   slug: "a-moon-jar",
   productName: "Korean moon jar",
   status: "final",
-  design: "v6",
+  design: "v7",
   scenes: [
     {
       role: "PRODUCT",
@@ -56,9 +58,10 @@ export const adAMoonJar: ProductAd = {
       role: "MAKING",
       id: "s03-making",
       // "Thrown in two halves, joined by hand" (storyboard) is NOT used: WA YU JAE's page does not say how the jar
-      // is formed. This line is the page's own wording ("도예가가 처음부터 끝까지 손으로 빚고 직접 만든 유약을 입힌 백자 화병").
+      // is formed. FINAL2: "Thrown on the wheel, glazed by hand." — the store's own process photo below shows the
+      // potter's hands at the wheel; the page says the potter shapes it by hand and glazes it.
       // Dark workshop photo → white caption.
-      caption: { body: ["Shaped by hand,", "glazed by the potter."], tone: "paper" },
+      caption: { body: ["Thrown on the wheel,", "glazed by hand."], tone: "paper" },
       // Right half only (hands on the wheel) — the left half shows the potter's face and is never used.
       // The camera eases toward the fingers at the rim (3% push-in + a 16 px drift), so the hands feel at work.
       visual: {
@@ -75,7 +78,7 @@ export const adAMoonJar: ProductAd = {
       role: "IN PLACE",
       id: "s04-in-place",
       // Final copy review (2026-11-26): "Quiet on a console." → the planner's final line.
-      caption: { body: ["A quiet beauty for your home."] },
+      caption: { body: ["Quiet on a console table."] },
       // Full frame, cropped in 15% from the bottom edge: the jar reads larger and sits ~110 px higher, clear of the
       // Reels caption area; the wall light and the room's proportions are kept. Push-in centred on the jar.
       visual: { kind: "photo", layout: "full", image: IN_PLACE, focus: [468, 1030], zoom: 1.15, zoomAnchor: [470, 1672] },

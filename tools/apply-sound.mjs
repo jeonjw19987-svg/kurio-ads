@@ -15,10 +15,10 @@ const sound = JSON.parse(fs.readFileSync(path.join(root, "src/ads/sound.json"), 
 const track = path.join(root, "public", sound.track);
 /** The ads and their delivery files (same names as package.json → <x>:render). */
 const ADS = [
-  "out/FINAL/INTERNAL_REVIEW/A-moon-jar/KURIO_AD_A_MOON_JAR_FINAL",
-  "out/FINAL/INTERNAL_REVIEW/B-traditional-gat/KURIO_AD_B_TRADITIONAL_GAT_FINAL",
-  "out/FINAL/INTERNAL_REVIEW/C-gotae-gat-v2/KURIO_AD_C_GOTAE_GAT_FINAL_v2",
-  "out/FINAL/INTERNAL_REVIEW/D-tiger-magpie/KURIO_AD_D_TIGER_MAGPIE_FINAL",
+  "out/FINAL2/_render/A-moon-jar/KURIO_AD_A_261126_v2",
+  "out/FINAL2/_render/D-traditional-gat/KURIO_AD_D_261126_v2",
+  "out/FINAL2/_render/C-gotae/KURIO_AD_C_261126_v2",
+  "out/FINAL2/_render/B-mother-of-pearl-plate/KURIO_AD_B_261126_v2",
 ];
 const npx = (args) => execFileSync("npx", args, { cwd: root, encoding: "utf8", shell: true, stdio: ["ignore", "pipe", "pipe"] });
 

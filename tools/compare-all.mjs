@@ -4,9 +4,9 @@ import path from "node:path";
 
 const root = path.resolve(import.meta.dirname, "..");
 const rows = [
-  ["A", "out/FINAL/INTERNAL_REVIEW/A-moon-jar/stills"],
-  ["B", "out/FINAL/INTERNAL_REVIEW/B-traditional-gat/stills"],
-  ["C", "out/FINAL/INTERNAL_REVIEW/C-gotae-gat-v2/stills"],
-  ["D", "out/FINAL/INTERNAL_REVIEW/D-tiger-magpie/stills"],
+  ["A", "out/FINAL2/_render/A-moon-jar/stills"],
+  ["B", "out/FINAL2/_render/B-mother-of-pearl-plate/stills"],
+  ["C", "out/FINAL2/_render/C-gotae/stills"],
+  ["D", "out/FINAL2/_render/D-traditional-gat/stills"],
 ];
-execFileSync("node", ["tools/compare-sheet.mjs", "out/FINAL/KURIO_ADS_A-D_FINAL_review.png", '"KURIO Meta ads — A, B, C, D FINAL (final copy review, 2026-11-26)"', ...rows.flat()], { cwd: root, stdio: "inherit", shell: true });
+execFileSync("node", ["tools/compare-sheet.mjs", "out/FINAL2/KURIO_ADS_A-D_261126_v2_review.png", '"KURIO Meta ads — A, B, C, D v2 (revision request, 2026-11-26)"', ...rows.flat().map((v) => `"${v}"`)], { cwd: root, stdio: "inherit", shell: true });

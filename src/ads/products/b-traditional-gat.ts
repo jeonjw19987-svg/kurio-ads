@@ -18,6 +18,10 @@ import type { ProductAd } from "../template/types";
  * bamboo split into thread (죽사), shaped with an iron, lacquered black; all handmade. Horsehair is mentioned only in
  * the page's general text about gat, not for this piece → ③ "Split bamboo, woven by hand." (not "…and horsehair").
  * Source and rights records: docs/internal/ (local, not public).
+ * FINAL2 (2026-11-26, planner's revision request v2 — request letter D): design "v7" (one shared 66 px title,
+ * end card with "Shop now"); lines per the request's §5 table.
+ * ① 3rd line: the request asked for "Woven from horsehair."; horsehair is not confirmed for this gat (the page lists
+ * bamboo), so — operator's decision, 2026-11-26 — "Finely woven, lacquered black." (woven bamboo brim, black lacquer).
  */
 
 const DIR = "assets/B_traditional_gat";
@@ -33,13 +37,13 @@ export const adBTraditionalGat: ProductAd = {
   slug: "b-traditional-gat",
   productName: "Traditional Korean gat",
   status: "final",
-  design: "v6",
+  design: "v7",
   scenes: [
     {
       role: "PRODUCT",
       id: "s01-product",
-      caption: { title: "Traditional\nKorean hat.", subtitle: "Gat.", body: ["A silhouette of Korean heritage."] },
-      // Title broken on purpose (it is wider than the frame at 88 px): "Traditional / Korean hat.", not "… / hat.".
+      caption: { title: "Traditional Korean hat.", subtitle: "Gat.", body: ["Finely woven, lacquered black."] },
+      // v7: the name on one line (881 px at 88 px in SUIT; 66 px now, shared by all four ads).
       // Whole gat with its strap on KURIO's warm ground (matte), centred below the name block. ×1.7 is the most this
       // 667 px studio photo allows; a larger original is on the "needed" list.
       visual: { kind: "photo", layout: "full", image: STUDIO, matte: MATTE, placement: { scale: 1.7, left: -74, top: 470 }, focus: [361, 300] },
@@ -54,7 +58,7 @@ export const adBTraditionalGat: ProductAd = {
     {
       role: "MAKING",
       id: "s03-making",
-      caption: { body: ["Split bamboo,", "woven by hand."] },
+      caption: { body: ["Split bamboo,", "shaped by hand."] },
       // Cropped 100 px below the photo's top edge so the out-of-focus field behind the caption comes from the light
       // cloth, not the hand at the very top (which smeared). Light field → ink caption.
       // Hands shaping the woven, still unlacquered brim with a heated iron. Same camera as every ③: 3% push-in and a
@@ -64,7 +68,7 @@ export const adBTraditionalGat: ProductAd = {
     {
       role: "IN PLACE",
       id: "s04-in-place",
-      caption: { body: ["Tradition, beautifully displayed."] },
+      caption: { body: ["On display, not in a box."] },
       // Staged composite (recorded as such): the same studio photo on the shared wall-and-walnut-shelf set, on a slim
       // walnut display stand — a collectible object in a modern room, not worn.
       visual: {

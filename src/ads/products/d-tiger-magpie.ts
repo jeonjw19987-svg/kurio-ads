@@ -23,6 +23,8 @@ import type { ProductAd } from "../template/types";
  * Copy (seller's page, checked 2026-11-26): 나전칠기 장식용 쟁반 (a decorative mother-of-pearl lacquer plate, not a minhwa
  * painting on hanji), mother-of-pearl and wood, Ø 180 mm, made in Korea (박씨상방), "Handmade"; the tiger drives away
  * bad luck, the magpie brings good news (길상과 수호).
+ * FINAL2 (2026-11-26, planner's revision request v2 — request letter B): design "v7" (one shared 66 px title,
+ * end card with "Shop now"); lines per the request's §5 table.
  */
 
 const DIR = "assets/D_najeon";
@@ -37,12 +39,12 @@ export const adDTigerMagpie: ProductAd = {
   slug: "d-tiger-magpie",
   productName: "Tiger & Magpie mother-of-pearl plate",
   status: "final",
-  design: "v6",
+  design: "v7",
   scenes: [
     {
       role: "PRODUCT",
       id: "s01-product",
-      caption: { title: "Tiger & Magpie.", subtitle: "Najeonchilgi.", body: ["Korean mother-of-pearl plate."] },
+      caption: { title: "Korean mother-of-pearl plate.", subtitle: "Najeonchilgi.", body: ["A tiger and a magpie."] },
       // Already 9:16 with a plain light ground above the plate → full frame; the name block sits on the ground and the
       // plate starts below it.
       visual: { kind: "photo", layout: "full", image: HERO, focus: [552, 950] },
@@ -51,7 +53,7 @@ export const adDTigerMagpie: ProductAd = {
       role: "DETAIL",
       id: "s02-detail",
       // The folk motif's meaning (호작도), in three lines.
-      caption: { body: ["A Korean folk motif.", "The tiger wards off bad luck.", "The magpie brings good news."] },
+      caption: { body: ["The tiger wards off bad luck.", "The magpie brings good news."] },
       // The rim starts high in this image, so full frame would put the motif under three lines → soft: the photo from
       // just above the rim, the warm surface continuing behind the caption. Ink caption on the light field.
       visual: { kind: "photo", layout: "soft", image: LYING, crop: { x: 0, y: 300, w: 1882, h: 2474 }, focus: [960, 1400] },
@@ -68,7 +70,7 @@ export const adDTigerMagpie: ProductAd = {
     {
       role: "IN PLACE",
       id: "s04-in-place",
-      caption: { body: ["A wish for good fortune."] },
+      caption: { body: ["On the shelf, facing the door."] },
       // 9:16 with the wall above the plate → full frame, like A's ④; the line sits on the wall.
       visual: { kind: "photo", layout: "full", image: ROOM, focus: [940, 1860] },
     },

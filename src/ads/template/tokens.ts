@@ -279,3 +279,33 @@ export const CAPTION_V6 = {
   ...CAPTION,
   firstCutTop: CAPTION.top - 70,
 } as const;
+
+// ── Design "v7" (planner's revision request, 2026-11-26) ─────────────────────────────────────────────────────────
+// ① block = product name on ONE line + romanised name + one visible fact. The longest name ("Korean mother-of-pearl
+// plate.") is 1178 px at 88 px (tools/copy-fit.mjs), so the shared title size is 66 px: every name fits one line and
+// all four ads keep the same size. Everything else as v6.
+export const TYPE_V7 = {
+  ...TYPE_V6,
+  title: { ...TYPE_V6.title, fontSize: 66 },
+} as const;
+
+/**
+ * v6 end card = v5 + a "Shop now" outline button under the wordmark (revision request §4). Rendered once
+ * (out/shared/KURIO_ENDCARD_v6.mp4) and joined, without re-encoding, to every ad.
+ */
+export const END_V6 = {
+  ...END_V5,
+  cta: "Shop now",
+  /** 0.3 s after the wordmark starts (frame 45 → 54), same rise-in as the captions; holds to the last frame. */
+  ctaIn: 54,
+  ctaInFrames: 11,
+  ctaRise: 16,
+  /** Top of the button: below the wordmark (centred at 910), clear of the Reels UI (y ≥ 1248). */
+  ctaTop: 1046,
+  ctaSize: 42,
+  ctaTracking: "0.04em",
+  ctaPadX: 60,
+  ctaPadY: 22,
+  ctaBorder: 2,
+} as const;
+

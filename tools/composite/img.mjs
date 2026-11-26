@@ -26,7 +26,8 @@ export function readImage(file) {
   return { w, h, data: new Float32Array(data) };
 }
 
-// 8-bit RGB PNG, written directly (the bundled ffmpeg has no rawvideo demuxer).
+// 8-bit RGB PNG (img.ch 3, default) or RGBA PNG (img.ch 4), written directly (the bundled ffmpeg has no rawvideo
+// demuxer).
 const CRC = new Int32Array(256).map((_, n) => {
   let c = n;
   for (let k = 0; k < 8; k++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1;
@@ -46,15 +47,16 @@ const chunk = (type, data) => {
   return Buffer.concat([len, td, crc]);
 };
 export function writePng(file, img) {
-  const row = img.w * 3 + 1;
+  const ch = img.ch ?? 3;
+  const row = img.w * ch + 1;
   const raw = Buffer.alloc(row * img.h);
   for (let y = 0; y < img.h; y++)
-    for (let i = 0; i < img.w * 3; i++) raw[y * row + 1 + i] = Math.max(0, Math.min(255, Math.round(img.data[y * img.w * 3 + i])));
+    for (let i = 0; i < img.w * ch; i++) raw[y * row + 1 + i] = Math.max(0, Math.min(255, Math.round(img.data[y * img.w * ch + i])));
   const ihdr = Buffer.alloc(13);
   ihdr.writeUInt32BE(img.w, 0);
   ihdr.writeUInt32BE(img.h, 4);
   ihdr[8] = 8;
-  ihdr[9] = 2;
+  ihdr[9] = ch === 4 ? 6 : 2;
   fs.writeFileSync(
     file,
     Buffer.concat([Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]), chunk("IHDR", ihdr), chunk("IDAT", zlib.deflateSync(raw, { level: 9 })), chunk("IEND", Buffer.alloc(0))]),

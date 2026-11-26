@@ -35,19 +35,22 @@ Remotion Studio opens at http://localhost:3000. Every ad has:
 
 ## Render
 ```bash
-npm run composite:d   # D only: put the real plate into the operator's ② ④ scenes → public/assets/D_najeon/*_final.png
-npm run a:render      # Ad A FINAL → out/FINAL/INTERNAL_REVIEW/A-moon-jar/
-npm run b:render      # Ad B FINAL → out/FINAL/INTERNAL_REVIEW/B-traditional-gat/
-npm run c:render      # Ad C FINAL v2 → out/FINAL/INTERNAL_REVIEW/C-gotae-gat-v2/ (① "GOTAE Tableware.")
-npm run d:render      # Ad D FINAL → out/FINAL/INTERNAL_REVIEW/D-tiger-magpie/
+npm run composite:c   # C ①: cut the set out of its studio photo → public/assets/C_gotae/01_product_cutout.png
+npm run composite:d   # D: put the real plate into the operator's ② ④ scenes → public/assets/D_najeon/*_final.png
+npm run copy:fit      # every caption line measured in SUIT (Remotion's browser); flags lines that would wrap
+npm run a:render      # request A (moon jar)          → out/FINAL2/_render/A-moon-jar/KURIO_AD_A_261126_v2
+npm run d:render      # request B (mother-of-pearl)   → out/FINAL2/_render/B-mother-of-pearl-plate/KURIO_AD_B_261126_v2
+npm run c:render      # request C (GOTAE)             → out/FINAL2/_render/C-gotae/KURIO_AD_C_261126_v2
+npm run b:render      # request D (traditional gat)   → out/FINAL2/_render/D-traditional-gat/KURIO_AD_D_261126_v2
 npm run render:all    # all four, one after another
 npm run <x>:stills    # stills + thumbnail only, for a quick review (stills:all for all four)
-npm run sheet:all     # out/FINAL/KURIO_ADS_A-D_FINAL_review.png — the five stills of every ad in one image
+npm run sheet:all     # out/FINAL2/KURIO_ADS_A-D_261126_v2_review.png — the five stills of every ad in one image
 npm run sound:apply   # swap src/ads/sound.json into all four renders (no frames re-rendered)
 ```
 
-The renders go to `out/FINAL/INTERNAL_REVIEW/<ad>/` (image rights not confirmed); the finished files are also copied
-flat into `out/FINAL/`. Earlier versions stay in `out/<ad>-v*/`. See STORYBOARD_FINAL.md for the final state.
+The planner's revision request (2026-11-26) letters the ads A moon jar, B mother-of-pearl plate, C GOTAE, D gat — B
+and D are swapped against this repo's codes, and the delivered file names follow the request. The finished files are
+copied flat into `out/FINAL2/`. Earlier deliveries stay in `out/FINAL/` and `out/<ad>-v*/`. See STORYBOARD_FINAL2.md.
 
 `tools/render-ad.mjs` does the following:
 - Bundles once and renders five representative stills and a thumbnail.

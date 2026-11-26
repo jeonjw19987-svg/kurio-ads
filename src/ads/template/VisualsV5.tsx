@@ -1,6 +1,6 @@
 import React from "react";
 import { AbsoluteFill, Img, interpolate, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
-import { MOTION_V5, SOFT, VIDEO } from "./tokens";
+import { COLORS, MOTION_V5, SOFT, VIDEO } from "./tokens";
 import type { CutRole, CutVisual, Rect, SourceImage } from "./types";
 import { CutVisualView } from "./Visuals";
 
@@ -165,6 +165,30 @@ const PhotoV5: React.FC<{ visual: Extract<CutVisual, { kind: "photo" }> }> = ({ 
   );
 };
 
-/** v5 cut visual: photos use the v5 layouts; any other kind (set, draft, missing) falls back to the v4 view. */
+/**
+ * v7 cut-out: an RGBA product image (its own alpha, shadow included) on KURIO's warm off-white ground, at an explicit
+ * placement, with the same push-in as every cut. The product's pixels are drawn as they are (no blend mode).
+ */
+const CutoutV5: React.FC<{ visual: Extract<CutVisual, { kind: "photo" }> }> = ({ visual }) => {
+  const { image, focus, placement } = visual;
+  if (!placement) throw new Error(`cut-out ${image.src} needs a placement`);
+  const { scale: s, left, top } = placement;
+  const origin: [number, number] = [left + focus[0] * s, top + focus[1] * s];
+  return (
+    <AbsoluteFill style={{ backgroundColor: COLORS.ground, overflow: "hidden" }}>
+      <Camera origin={origin} pushIn={visual.pushIn ?? MOTION_V5.pushInScale} drift={visual.drift}>
+        <Img src={staticFile(image.src)} style={{ position: "absolute", left, top, width: image.width * s, height: image.height * s, maxWidth: "none" }} />
+      </Camera>
+    </AbsoluteFill>
+  );
+};
+
+/** v5 cut visual: photos use the v5 layouts (v7: cut-outs too); any other kind (set, draft, missing) falls back to the v4 view. */
 export const CutVisualViewV5: React.FC<{ role: CutRole; visual: CutVisual }> = ({ role, visual }) =>
-  visual.kind === "photo" && !visual.matte && !visual.placement ? <PhotoV5 visual={visual} /> : <CutVisualView role={role} visual={visual} />;
+  visual.kind === "photo" && visual.cutout ? (
+    <CutoutV5 visual={visual} />
+  ) : visual.kind === "photo" && !visual.matte && !visual.placement ? (
+    <PhotoV5 visual={visual} />
+  ) : (
+    <CutVisualView role={role} visual={visual} />
+  );
