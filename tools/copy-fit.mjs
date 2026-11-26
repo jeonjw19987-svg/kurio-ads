@@ -17,7 +17,7 @@ const root = path.resolve(import.meta.dirname, "..");
 const AVAILABLE = 1080 - 88 - 88; // tokens.ts → CAPTION.left / right
 const TITLE_SIZE = 66; // tokens.ts → TYPE_V7.title.fontSize (the size the widths below are measured at)
 
-const files = ["a-moon-jar", "b-traditional-gat", "c-gotae-gat", "d-tiger-magpie"];
+const files = ["a-moon-jar", "b-traditional-gat", "c-gotae-gat", "d-tiger-magpie", "e-gat-clock"];
 const lines = [];
 for (const f of files) {
   const mod = await import(pathToFileURL(path.join(root, "src/ads/products", `${f}.ts`)).href);

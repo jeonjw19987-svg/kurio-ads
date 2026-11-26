@@ -3,6 +3,7 @@ import { adAMoonJar } from "./ads/products/a-moon-jar";
 import { adBTraditionalGat } from "./ads/products/b-traditional-gat";
 import { adCGotaeGat, adCGotaeGatRoom } from "./ads/products/c-gotae-gat";
 import { adDTigerMagpie } from "./ads/products/d-tiger-magpie";
+import { adEGatClock } from "./ads/products/e-gat-clock";
 import { EndCard } from "./ads/template/EndCard";
 import { EndCardV5, EndCardV6 } from "./ads/template/EndCardV5";
 import { ProductAdVideo, resolveClips } from "./ads/template/ProductAdVideo";
@@ -58,6 +59,8 @@ export const RemotionRoot: React.FC = () => {
         <AdCompositions ad={adBTraditionalGat} />
         <AdCompositions ad={adCGotaeGat} />
         <AdCompositions ad={adDTigerMagpie} />
+        {/* E (2026-11-26): MU:DS GAT Wall Clock — the homepage's ad piece C since that day. */}
+        <AdCompositions ad={adEGatClock} />
         {/* Shared end card. Rendered once; the same file goes into every ad. */}
         <Composition id="KURIO-EndCard" component={EndCard} durationInFrames={cut} {...size} />
         {/* v5 shared end card (black; tagline, then wordmark). Rendered once as out/shared/KURIO_ENDCARD_v5.mp4. */}

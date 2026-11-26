@@ -86,3 +86,36 @@
 - 네 편 비교 이미지는 `KURIO_ADS_A-D_261126_v2_review.png`입니다.
 - 렌더 작업 폴더(장면 스틸, 렌더 보고서)는 `_render/`입니다.
 - 이전 납품본은 `out/FINAL/`에 그대로 있습니다.
+
+## 8. E — 갓 벽시계 (2026-11-26 추가)
+홈페이지의 광고 상품 C가 2026-11-26 운영자 결정으로 GOTAE 초립 세트에서 뮷즈 갓 벽시계(GAT Wall Clock)로 바뀌었다. 이 광고는 다섯 번째 편 **E**로 만든다.
+- 저장소 컴포지션: `KURIO-AD-E-GAT-CLOCK`
+- 상품 파일: `e-gat-clock.ts`
+- 디자인 v7, 엔드카드 v6, 공통 음원은 A–D와 같다. 바뀌는 것은 사진과 자막뿐이다.
+
+| 비트 | 자막 | 화면 |
+|---|---|---|
+| ① 0–3초 | Korean gat wall clock. / Gat sigye. / No hands. Two layers turn. | 흰 벽의 시계를 KURIO 바탕색(#F4F1EC) 위로 옮긴 합성(`npm run composite:e`). 벽에 대한 밝기 비율을 그대로 옮겨 시계·무늬·그림자가 사진과 같다 |
+| ② 3–6초 | Inspired by the gat, / the hat of Joseon scholars. | 검은 원목 중심부와 아크릴 원판 근접(갓의 모자·양태) |
+| ③ 6–9초 | Precision-cut acrylic, / solid wood. | 금속 선반에 둔 시계 정면 |
+| ④ 9–12초 | On the wall, keeping time. | 흰 벽의 시계(원본 사진 그대로) |
+| ⑤ 12–15초 | Curious about Korea → KURIO → Shop now | A–D와 같은 엔드카드 파일 |
+
+- ④는 기획 문구다. ①–③은 판매처 상세 이미지에 적힌 사실로 A–D 형식에 맞춰 썼다.
+  - 흑립의 구조미를 인테리어 오브제로 재해석했다.
+  - 바늘이 없고, 직선·곡선 무늬의 아크릴 두 장이 시침·분침 역할을 한다.
+  - 정밀 레이저·미세 가공, 아크릴과 원목을 썼다.
+- 쓰지 않은 것: 가격, 제조사 이름, A/S, 박물관 공식 제휴 같은 표현.
+- 줄 폭은 `npm run copy:fit`으로 확인했다. 가장 긴 줄은 621px로, 허용 폭은 904px다.
+- **사진**: 판매처(뮷즈 국내몰)가 자동화 브라우저를 막아 우회하지 않았다. 운영자가 페이지 이미지를 저장해 주었다.
+  - 홈페이지 작업에서 사진 칸을 잘라 Lanczos로 2배 키웠다(약한 선명도 보정, AI 없음).
+  - 파일은 `public/assets/E_gat_clock/`에 있고 git에서 제외된다.
+  - 다른 출판사 책 제목이 크게 보이는 사진 1장은 쓰지 않았다.
+  - 서면 사용 허락은 없다(A–D와 같은 운영자 결정).
+- **출력**: `out/FINAL2/`에 `KURIO_AD_E_261126_v1.mp4`, `_SILENT.mp4`, `_THUMBNAIL.png`
+  - 렌더 명령은 `npm run e:render`, 스틸만 뽑을 때는 `npm run e:stills`다.
+
+**Meta 광고 문구 초안** (운영자 승인 전, 송출하지 않음)
+- Primary text: A Korean gat wall clock with no hands — two precision-cut acrylic layers turn as the hours pass. Inspired by the gat, the hat of Joseon scholars.
+- Headline: Korean gat wall clock
+- Description: On the wall, keeping time.
