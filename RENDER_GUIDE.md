@@ -38,7 +38,7 @@ Remotion Studio opens at http://localhost:3000. Every ad has:
 npm run a:render      # Ad A v6 → out/A-moon-jar-v6/ (v5 output kept in out/A-moon-jar-v5/)
 npm run b:render      # Ad B v2 → out/B-traditional-gat-v2/
 npm run c:render      # Ad C v2 → out/C-gotae-gat-v2/
-npm run d:render      # Ad D v2 → out/D-tiger-magpie-v2/
+npm run d:render      # Ad D v3 → out/D-tiger-magpie-v3/ (v1, v2 output kept)
 npm run render:all    # all four, one after another
 npm run <x>:stills    # stills + thumbnail only, for a quick review
 npm run sheet:all     # out/KURIO_ADS_A-D_review.png — the five stills of every ad in one image
