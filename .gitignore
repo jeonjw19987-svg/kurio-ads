@@ -23,3 +23,6 @@ docs/internal/
 
 # Older versions' source (v1 reconstruction) stays local and in the tagged history.
 archive/
+
+# Audio files (music, sound effects) stay local — the v5 track is regenerated exactly by `npm run sound`.
+public/audio/

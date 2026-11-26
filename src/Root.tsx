@@ -1,9 +1,10 @@
 import { Composition, Folder, Still } from "remotion";
-import { adAMoonJar } from "./ads/products/a-moon-jar";
+import { adAMoonJar, adAMoonJarAltCopy } from "./ads/products/a-moon-jar";
 import { adBTraditionalGat } from "./ads/products/b-traditional-gat";
 import { adCGotaeGat } from "./ads/products/c-gotae-gat";
 import { adDTigerMagpie } from "./ads/products/d-tiger-magpie";
 import { EndCard } from "./ads/template/EndCard";
+import { EndCardV5 } from "./ads/template/EndCardV5";
 import { ProductAdVideo, resolveClips } from "./ads/template/ProductAdVideo";
 import { KeyframeScene } from "./ads/template/ProductScene";
 import { VIDEO } from "./ads/template/tokens";
@@ -60,6 +61,17 @@ export const RemotionRoot: React.FC = () => {
         <AdCompositions ad={adDTigerMagpie} />
         {/* Shared end card. Rendered once; the same file goes into every ad. */}
         <Composition id="KURIO-EndCard" component={EndCard} durationInFrames={cut} {...size} />
+        {/* v5 shared end card (black; tagline, then wordmark). Rendered once as out/shared/KURIO_ENDCARD_v5.mp4. */}
+        <Composition id="KURIO-EndCard-v5" component={EndCardV5} durationInFrames={cut} {...size} />
+        {/* Review only: A with the alternative ④ line, for the planner to compare. Not an ad. */}
+        <Composition
+          id={adAMoonJarAltCopy.compositionId}
+          component={ProductAdVideo}
+          defaultProps={{ ad: adAMoonJarAltCopy, withEndCard: true }}
+          calculateMetadata={resolveClips}
+          durationInFrames={cut * VIDEO.sceneCount}
+          {...size}
+        />
       </Folder>
       <Folder name="Setup-Tests">
         <MyComposition />

@@ -145,3 +145,105 @@ export const SHADOW = {
   cast: { width: 0.95, height: 0.14, offsetX: 0.2, opacity: 0.22, blur: 0.045 },
   color: "58, 48, 38",
 } as const;
+
+// ══ v5 (2026-11-26) ═══════════════════════════════════════════════════════════════════════════════════
+// A v5 refinement (planner feedback). Used by ads whose data says `design: "v5"` — today only A. B, C and D stay
+// on the v4 values above until A v5 is approved; then they switch by setting `design: "v5"` in their data.
+
+/** v5 end card: all black (the red card is retired), white type. */
+export const COLORS_V5 = {
+  ...COLORS,
+  endCard: "#000000",
+} as const;
+
+/**
+ * v5 type: clearer hierarchy — product name (Bold) › description (Regular, larger than v4 for legibility) ›
+ * romanised name (Regular, secondary colour). Same family, same top-left block position as v4.
+ */
+export const TYPE_V5 = {
+  title: { fontFamily: FONT_FAMILY, fontWeight: 700, fontSize: 88, lineHeight: 1.05, letterSpacing: "-0.025em" },
+  subtitle: { fontFamily: FONT_FAMILY, fontWeight: 400, fontSize: 46, lineHeight: 1.2, letterSpacing: "-0.005em" },
+  body: { fontFamily: FONT_FAMILY, fontWeight: 400, fontSize: 54, lineHeight: 1.28, letterSpacing: "-0.012em" },
+  titleToSubtitleGap: 6,
+  nameToBodyGap: 30,
+  /** Caption colour per cut: "ink" on light images, "paper" on dark ones (chosen in the product data). */
+  tone: {
+    ink: { color: COLORS.ink, soft: COLORS.inkSoft, halo: "0 0 28px rgba(244, 241, 236, 0.55)" },
+    paper: { color: "#FFFFFF", soft: "rgba(255, 255, 255, 0.78)", halo: "0 0 28px rgba(0, 0, 0, 0.25)" },
+  },
+} as const;
+
+/**
+ * v5 motion — one language for every cut: text rises into place and lifts away; images only push in slowly.
+ * - ① name block: on screen from frame 0, settling 8 px upward over the cut (barely perceptible).
+ * - ① description: appears 0.4 s in, rising 26 px over 0.37 s.
+ * - ② ③ ④: appear 0.3 s after the hard cut, rising 26 px over 0.37 s, ease-out (no overshoot, no bounce).
+ * - Every caption lifts 24 px and fades over the last 8 frames before the cut, so the next line reads as its
+ *   continuation. Images themselves always hard-cut.
+ */
+export const MOTION_V5 = {
+  pushInScale: 1.025,
+  pushEase: Easing.bezier(0.25, 0.46, 0.45, 0.94),
+  nameSettle: 8,
+  nameSettleFrames: 75,
+  firstBodyDelay: 12,
+  captionInDelay: 9,
+  captionInFrames: 11,
+  captionRise: 26,
+  captionInEase: Easing.bezier(0.22, 1, 0.36, 1),
+  captionOutFrames: 8,
+  captionOutLift: 24,
+  captionOutEase: Easing.bezier(0.55, 0, 0.75, 0.4),
+} as const;
+
+/**
+ * v5 "soft" photo layout (② ③): the photo fills the width and bleeds off the bottom; above it, the photo's own top
+ * rows continue as an out-of-focus field (stretched + blurred — no new detail is drawn), and the sharp photo
+ * dissolves into it like shallow depth of field. Caption sits on that field: no band, no edge line.
+ */
+export const SOFT = {
+  /** Photo top on screen (px). The field fills everything above it. */
+  top: 500,
+  /** Source rows (px) that are stretched into the field. */
+  edgeRows: 10,
+  /** Blur of the field near the photo (px). */
+  blur: 44,
+  /** Blur of the field higher up, behind the caption (px) — fully used above `farUntil` (px from the top). */
+  farBlur: 150,
+  farUntil: 260,
+  /** Height (px) over which the sharp photo fades into the field. */
+  dissolve: 220,
+  /** Strength of the photographic grain restored on the field (overlay opacity) — dithers 8-bit banding. */
+  grain: 0.1,
+} as const;
+
+/** v5 end card: black; tagline 12.0–13.5 s, then the wordmark 13.5–15.0 s — never both at once. */
+export const END_V5 = {
+  /** Optical centre of both elements (frame centre is 960; slightly higher clears the Reels caption area). */
+  centerY: 910,
+  taglineSize: 64,
+  taglineIn: 6,
+  taglineInFrames: 11,
+  taglineRise: 26,
+  /** Tagline is gone at frame 45 (13.5 s) … */
+  taglineOutStart: 36,
+  taglineOutEnd: 45,
+  taglineOutLift: 24,
+  /** … and the wordmark appears from frame 45, settling its tracking, then holds to the last frame. */
+  markIn: 45,
+  markInFrames: 21,
+  markSize: 168,
+  /** Wordmark tracking: settles from this value to the site's 0.32em. */
+  markTrackingFrom: 0.4,
+  markTracking: 0.32,
+} as const;
+
+/**
+ * v5 sound: one shared, pre-mixed 15 s track (music bed + cut accents + end-card signature), written by
+ * tools/compose-sound.mjs — original, made in-house from code (no samples, no third-party material).
+ * The render muxes it under the joined video (video stream copied). Silent masters use silence instead.
+ */
+export const SOUND_V5 = {
+  track: "audio/kurio-sound-v5.wav",
+  volume: 1,
+} as const;

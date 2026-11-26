@@ -3,8 +3,9 @@ import React from "react";
 import { AbsoluteFill, CalculateMetadataFunction, Sequence, staticFile } from "remotion";
 import audio from "../audio.json";
 import { EndCard } from "./EndCard";
+import { EndCardV5 } from "./EndCardV5";
 import { ProductScene } from "./ProductScene";
-import { clipPath, COLORS, VIDEO } from "./tokens";
+import { clipPath, COLORS, SOUND_V5, VIDEO } from "./tokens";
 import type { AdProps } from "./types";
 
 /**
@@ -18,17 +19,20 @@ import type { AdProps } from "./types";
  */
 export const ProductAdVideo: React.FC<AdProps> = ({ ad, withEndCard, clips }) => {
   const cut = VIDEO.sceneFrames;
+  const v5 = ad.design === "v5";
+  // v5: the shared v5 sound (music bed, cut accents, end-card signature) — previewed here, muxed by render-ad.mjs.
+  const track = v5 ? SOUND_V5 : audio.src ? { track: audio.src, volume: audio.volume } : null;
   return (
     <AbsoluteFill style={{ backgroundColor: COLORS.ground }}>
-      {withEndCard && audio.src ? <Audio src={staticFile(audio.src)} volume={audio.volume} /> : null}
+      {withEndCard && track ? <Audio src={staticFile(track.track)} volume={track.volume} /> : null}
       {ad.scenes.map((scene, i) => (
         <Sequence key={scene.id} name={`${i + 1} ${scene.role}${clips?.[i] ? " · clip" : ` · ${scene.visual.kind}`}`} from={i * cut} durationInFrames={cut}>
-          <ProductScene scene={scene} clip={clips?.[i] ?? null} />
+          <ProductScene scene={scene} clip={clips?.[i] ?? null} design={ad.design} />
         </Sequence>
       ))}
       {withEndCard ? (
         <Sequence name="5 END CARD" from={4 * cut} durationInFrames={cut}>
-          <EndCard />
+          {v5 ? <EndCardV5 /> : <EndCard />}
         </Sequence>
       ) : null}
     </AbsoluteFill>

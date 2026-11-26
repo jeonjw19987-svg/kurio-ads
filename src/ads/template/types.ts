@@ -36,7 +36,24 @@ export type CutVisual =
    * `matte` (brightness factor): studio shot on a flat light background, multiplied onto the ground — lets a
    * product sit lower or smaller in the frame on KURIO's ground with no seam. Needs `placement`.
    */
-  | { kind: "photo"; layout: "full" | "plate"; image: SourceImage; crop?: Rect; focus: [number, number]; matte?: number; placement?: Placement }
+  | {
+      kind: "photo";
+      /** v5 adds "soft" (tokens.ts → SOFT): photo from SOFT.top down, its own top rows as a soft field above. */
+      layout: "full" | "plate" | "soft";
+      image: SourceImage;
+      crop?: Rect;
+      focus: [number, number];
+      matte?: number;
+      placement?: Placement;
+      /** v5: static crop-in (e.g. 1.12 = the product 12% larger), centred on `focus`, before the push-in. */
+      zoom?: number;
+      /** v5: the source point (px) that stays fixed when zooming (default `focus`). The bottom edge lifts the product. */
+      zoomAnchor?: [number, number];
+      /** v5: slow camera drift over the cut, screen px [x, y], alongside the push-in (e.g. towards the hands). */
+      drift?: [number, number];
+      /** v5: push-in amount for this cut (default MOTION_V5.pushInScale, 2.5%). */
+      pushIn?: number;
+    }
   /**
    * IN PLACE composite for a product with no photo of itself in a room: the shared set (tokens.ts → SET) with the
    * matte product photo placed on the shelf. `surfaceY` is the shelf's back edge on screen. Always a staged composite.
@@ -70,6 +87,8 @@ export type AdScene = {
     subtitle?: string;
     /** Descriptive lines, one entry per line break as the storyboard sets them. */
     body: string[];
+    /** v5: "ink" (#111, default) on light images, "paper" (white) on dark ones. */
+    tone?: "ink" | "paper";
   };
   /** The cut's image. A generated clip in public/clips/<slug>/ replaces it when present. */
   visual: CutVisual;
@@ -92,6 +111,11 @@ export type ProductAd = {
    * in their names and must not be used as an ad (e.g. image rights or a key scene still open).
    */
   status: "final" | "review";
+  /**
+   * Design system version (tokens.ts). Default "v4". "v5" = v5 captions, soft photo layout, black end card and
+   * the shared v5 sound. Switch an ad only together with its review; all four should end on the same version.
+   */
+  design?: "v4" | "v5";
 };
 
 /** Props of the ad compositions. `clips` is filled by calculateMetadata (which slot files exist). */

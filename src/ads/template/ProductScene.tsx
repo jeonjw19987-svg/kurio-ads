@@ -2,9 +2,11 @@ import { Video } from "@remotion/media";
 import React from "react";
 import { AbsoluteFill, staticFile, useVideoConfig } from "remotion";
 import { Caption } from "./Caption";
+import { CaptionV5 } from "./CaptionV5";
 import { COLORS, VIDEO } from "./tokens";
-import type { AdScene } from "./types";
+import type { AdScene, ProductAd } from "./types";
 import { CutVisualView } from "./Visuals";
+import { CutVisualViewV5 } from "./VisualsV5";
 
 /**
  * A generated clip (Higgsfield) covering the frame. Its own camera move is kept; no extra push-in.
@@ -24,17 +26,29 @@ const ClipView: React.FC<{ src: string; trimSec: number }> = ({ src, trimSec }) 
 };
 
 /** One content cut: the clip if its slot has a file, otherwise the still image; then the caption. */
-export const ProductScene: React.FC<{ scene: AdScene; clip: string | null }> = ({ scene, clip }) => (
-  <AbsoluteFill style={{ backgroundColor: COLORS.ground }}>
-    {clip ? <ClipView src={clip} trimSec={scene.clipTrimSec ?? 0} /> : <CutVisualView role={scene.role} visual={scene.visual} />}
-    <Caption
-      title={scene.caption.title}
-      subtitle={scene.caption.subtitle}
-      body={scene.caption.body}
-      fromFirstFrame={scene.role === "PRODUCT"}
-    />
-  </AbsoluteFill>
-);
+export const ProductScene: React.FC<{ scene: AdScene; clip: string | null; design?: ProductAd["design"] }> = ({ scene, clip, design = "v4" }) =>
+  design === "v5" ? (
+    <AbsoluteFill style={{ backgroundColor: COLORS.ground }}>
+      {clip ? <ClipView src={clip} trimSec={scene.clipTrimSec ?? 0} /> : <CutVisualViewV5 role={scene.role} visual={scene.visual} />}
+      <CaptionV5
+        title={scene.caption.title}
+        subtitle={scene.caption.subtitle}
+        body={scene.caption.body}
+        tone={scene.caption.tone}
+        isFirstCut={scene.role === "PRODUCT"}
+      />
+    </AbsoluteFill>
+  ) : (
+    <AbsoluteFill style={{ backgroundColor: COLORS.ground }}>
+      {clip ? <ClipView src={clip} trimSec={scene.clipTrimSec ?? 0} /> : <CutVisualView role={scene.role} visual={scene.visual} />}
+      <Caption
+        title={scene.caption.title}
+        subtitle={scene.caption.subtitle}
+        body={scene.caption.body}
+        fromFirstFrame={scene.role === "PRODUCT"}
+      />
+    </AbsoluteFill>
+  );
 
 /** Start image for Higgsfield: the cut's image at frame 0, without caption. */
 export const KeyframeScene: React.FC<{ scene: AdScene; productScene: AdScene }> = ({ scene, productScene }) => (

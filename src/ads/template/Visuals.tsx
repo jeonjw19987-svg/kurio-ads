@@ -378,7 +378,8 @@ export const CutVisualView: React.FC<{ role: CutRole; visual: CutVisual }> = ({ 
   switch (visual.kind) {
     case "photo":
       return (
-        <PhotoView layout={visual.layout} image={visual.image} crop={visual.crop} focus={visual.focus} matte={visual.matte} placement={visual.placement} />
+        // v4 has no "soft" layout (v5 only); in a v4 view (e.g. a Higgsfield keyframe) it shows as "plate".
+        <PhotoView layout={visual.layout === "soft" ? "plate" : visual.layout} image={visual.image} crop={visual.crop} focus={visual.focus} matte={visual.matte} placement={visual.placement} />
       );
     case "set":
       return (
