@@ -1,8 +1,9 @@
 import type { ProductAd } from "../template/types";
 
 /**
- * Ad B — Traditional Korean gat (heuklip, black; National Intangible Heritage maker). v1, 2026-11-26, design "v5"
- * (same template, type, motion, end card and sound as A v5 — only the images and lines differ).
+ * Ad B — Traditional Korean gat (heuklip, black; National Intangible Heritage maker). v2, 2026-11-26, design "v6"
+ * (same template, type, motion, end card and sound as A v6 — only the images and lines differ). v2 = v1 with the
+ * A v6 typography (SUIT content type, ① caption block raised 70 px); images, crops and lines unchanged.
  *
  * Images (not in this repository): public/assets/B_traditional_gat/, prepared from the maker's own photos on the
  * product page (tools: crop / Lanczos downscale only — nothing enlarged, retouched or generated):
@@ -32,7 +33,7 @@ export const adBTraditionalGat: ProductAd = {
   slug: "b-traditional-gat",
   productName: "Traditional Korean gat",
   status: "final",
-  design: "v5",
+  design: "v6",
   scenes: [
     {
       role: "PRODUCT",

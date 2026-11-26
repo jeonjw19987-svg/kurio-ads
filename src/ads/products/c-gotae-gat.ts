@@ -1,8 +1,9 @@
 import type { ProductAd } from "../template/types";
 
 /**
- * Ad C — GOTAE "GAT" tableware, 초립 (Chorip) black, plate + cup for one. v1, 2026-11-26, design "v5"
- * (same template, type, motion, end card and sound as A v5 — only the images and lines differ).
+ * Ad C — GOTAE "GAT" tableware, 초립 (Chorip) black, plate + cup for one. v2, 2026-11-26, design "v6"
+ * (same template, type, motion, end card and sound as A v6 — only the images and lines differ). v2 = v1 with the
+ * A v6 typography (SUIT content type, ① caption block raised 70 px); images, crops and lines unchanged.
  *
  * Images (not in this repository): public/assets/C_gotae/, all of the BLACK set from GOTAE's own product page
  * (crop / downscale only; the white version and customers' photos are not used):
@@ -32,7 +33,7 @@ export const adCGotaeGat: ProductAd = {
   slug: "c-gotae-gat",
   productName: "GAT tableware",
   status: "final",
-  design: "v5",
+  design: "v6",
   scenes: [
     {
       role: "PRODUCT",

@@ -36,9 +36,9 @@ Remotion Studio opens at http://localhost:3000. Every ad has:
 ## Render
 ```bash
 npm run a:render      # Ad A v6 → out/A-moon-jar-v6/ (v5 output kept in out/A-moon-jar-v5/)
-npm run b:render      # Ad B v1 → out/B-traditional-gat-v1/
-npm run c:render      # Ad C v1 → out/C-gotae-gat-v1/
-npm run d:render      # Ad D v1 → out/D-tiger-magpie-v1/
+npm run b:render      # Ad B v2 → out/B-traditional-gat-v2/
+npm run c:render      # Ad C v2 → out/C-gotae-gat-v2/
+npm run d:render      # Ad D v2 → out/D-tiger-magpie-v2/
 npm run render:all    # all four, one after another
 npm run <x>:stills    # stills + thumbnail only, for a quick review
 npm run sheet:all     # out/KURIO_ADS_A-D_review.png — the five stills of every ad in one image
@@ -62,7 +62,7 @@ so the join is still a stream copy. Files:
 | `stills/…_Scene_01…05` (+ `_tagline`, `_REVIEW_Scene_04_ALT-COPY`) | representative frames |
 | `…_render-report.json` | resolution, fps, profile, bitrate and audio of what was actually written (ffprobe) |
 
-A uses design v6 (SUIT content type), B–D design v5; all four use the same render settings (`--quality=master --audio=shared --silent-master`).
+All four use design v6 (SUIT content type) and the same render settings (`--quality=master --audio=shared --silent-master`).
 Sound: `src/ads/sound.json` is the one setting for all four. `npm run sound` rewrites `public/audio/kurio-sound-v5.wav` from `tools/compose-sound.mjs` (deterministic).
 
 Output name suffixes:
