@@ -17,6 +17,7 @@ import type { ProductAd } from "../template/types";
  * "trainedAlgorithmicMedia" — AI-generated images, not photographs. In 02 and 04 the plate's motif is redrawn
  * (the tiger's face, mouth and stripes differ from the seller's photos); 03 shows an orchid, not this plate, and not
  * this maker. The rendered MP4 does not carry the credentials. Recorded in docs/internal/PRODUCT_SOURCES_BCD.md.
+ * Confirmed as D's final version by the operator on 2026-11-26, with these points known.
  *
  * Copy (seller's page, checked 2026-11-26): 나전칠기 (mother-of-pearl inlaid in lacquer), mother-of-pearl and wood,
  * Ø 180 mm, made in Korea (박씨상방), "Handmade"; the tiger drives away bad luck, the magpie brings good news
