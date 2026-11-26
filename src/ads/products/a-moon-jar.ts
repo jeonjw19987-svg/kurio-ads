@@ -1,8 +1,9 @@
 import type { ProductAd } from "../template/types";
 
 /**
- * Ad A — Korean moon jar (white porcelain). v5, 2026-11-26 — planner feedback on v4 + motion/design refinement.
- * Design system "v5" (tokens.ts): v5 captions, the "soft" photo layout for ② ③, the black end card, shared sound.
+ * Ad A — Korean moon jar (white porcelain). v6, 2026-11-26: v5 (planner feedback on v4) + content typography in
+ * SUIT and the ① caption block raised 70 px. Design "v6" (tokens.ts → TYPE_V6, CAPTION_V6); images, crops, motion,
+ * end card and sound unchanged from v5 (the v5 source is commit ffdd783).
  *
  * Images are NOT in this repository (see RENDER_GUIDE.md → "Assets not in this repo"); they are expected at the
  * paths below. Two planner files carry a doubled extension on disk (".png.png"); the paths use the real names.
@@ -30,7 +31,7 @@ export const adAMoonJar: ProductAd = {
   slug: "a-moon-jar",
   productName: "Korean moon jar",
   status: "final",
-  design: "v5",
+  design: "v6",
   scenes: [
     {
       role: "PRODUCT",

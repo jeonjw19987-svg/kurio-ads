@@ -240,3 +240,42 @@ export const END_V5 = {
 
 // v5 sound: one shared, pre-mixed 15 s track for every ad (music bed + cut accents + end-card signature). Not a
 // design token: see src/ads/sound.json (the single setting), SharedSound.tsx and tools/compose-sound.mjs.
+
+// ══ v6 (2026-11-26) — content typography ════════════════════════════════════════════════════════════
+// Two typefaces with two jobs, managed here:
+// - BRAND  (LINE Seed Sans EN): KURIO's identity — the end card's line and the wordmark. Unchanged from v5.
+// - CONTENT (SUIT): every product line in 0–12 s (name, romanised name, description). SUIT by SUNN, the face
+//   GOTAE's site uses, SIL OFL 1.1 (public/fonts/suit/OFL.txt). Applied inside KURIO's system: same sizes,
+//   colours, positions and motion as v5 — only family, weights, tracking and leading change.
+// Design "v6" = v5 + TYPE_V6 + the ① caption block raised 70 px (planner feedback). Images, end card, motion and
+// sound are shared with v5 unchanged.
+
+export const FONTS = {
+  /** Brand: end card and wordmark (EndCardV5, KurioWordmark). */
+  brand: FONT_FAMILY,
+  /** Content: product text 0–12 s (CaptionV5 with TYPE_V6). */
+  content: "SUIT",
+} as const;
+loadFont({ family: FONTS.content, url: staticFile("fonts/suit/SUIT-Regular.woff2"), weight: "400" });
+loadFont({ family: FONTS.content, url: staticFile("fonts/suit/SUIT-Medium.woff2"), weight: "500" });
+loadFont({ family: FONTS.content, url: staticFile("fonts/suit/SUIT-SemiBold.woff2"), weight: "600" });
+
+/**
+ * v6 content type. Sizes and hierarchy as v5 (name 88 › description 54 › romanised name 46); SUIT weights
+ * SemiBold / Regular / Medium; tracking within −0.01em…0; leading 1.2 for names, 1.35 for descriptions. The block's
+ * inner gaps are reduced by the added half-leading so the visible rhythm stays as in v5.
+ */
+export const TYPE_V6 = {
+  title: { fontFamily: FONTS.content, fontWeight: 600, fontSize: 88, lineHeight: 1.2, letterSpacing: "-0.01em" },
+  subtitle: { fontFamily: FONTS.content, fontWeight: 500, fontSize: 46, lineHeight: 1.2, letterSpacing: "0em" },
+  body: { fontFamily: FONTS.content, fontWeight: 400, fontSize: 54, lineHeight: 1.35, letterSpacing: "-0.005em" },
+  titleToSubtitleGap: 0,
+  nameToBodyGap: 26,
+  tone: TYPE_V5.tone,
+} as const;
+
+/** v6 caption position: ② ③ ④ as v5; the ① block (name + description) sits 70 px higher, clear of the product. */
+export const CAPTION_V6 = {
+  ...CAPTION,
+  firstCutTop: CAPTION.top - 70,
+} as const;

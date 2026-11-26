@@ -15,7 +15,7 @@ const sound = JSON.parse(fs.readFileSync(path.join(root, "src/ads/sound.json"), 
 const track = path.join(root, "public", sound.track);
 /** The v5 ads and their delivery files (same names as package.json → <x>:render). */
 const ADS = [
-  "out/A-moon-jar-v5/KURIO_AD_A_MOON_JAR_v5",
+  "out/A-moon-jar-v6/KURIO_AD_A_MOON_JAR_v6",
   "out/B-traditional-gat-v1/KURIO_AD_B_TRADITIONAL_GAT_v1",
   "out/C-gotae-gat-v1/KURIO_AD_C_GOTAE_GAT_v1",
   "out/D-tiger-magpie-v1/KURIO_AD_D_TIGER_MAGPIE_v1",

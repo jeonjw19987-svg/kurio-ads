@@ -1,6 +1,9 @@
 import React from "react";
 import { interpolate, useCurrentFrame, useVideoConfig } from "remotion";
-import { CAPTION, GREYSCALE_TEXT, MOTION_V5, TYPE_V5 } from "./tokens";
+import { CAPTION, GREYSCALE_TEXT, MOTION_V5, TYPE_V5, TYPE_V6 } from "./tokens";
+
+/** A caption typography set (TYPE_V5 or TYPE_V6): title / subtitle / body styles, gaps and tones. */
+type TypeSet = typeof TYPE_V5 | typeof TYPE_V6;
 
 const clamp = { extrapolateLeft: "clamp" as const, extrapolateRight: "clamp" as const };
 
@@ -29,10 +32,14 @@ export const CaptionV5: React.FC<{
   body: string[];
   tone?: "ink" | "paper";
   isFirstCut: boolean;
-}> = ({ title, subtitle, body, tone = "ink", isFirstCut }) => {
+  /** Typography set: TYPE_V5 (default, LINE Seed Sans) or TYPE_V6 (SUIT content type). Same shape. */
+  type?: TypeSet;
+  /** Block top (px); default CAPTION.top. v6 raises the ① block (CAPTION_V6.firstCutTop). */
+  top?: number;
+}> = ({ title, subtitle, body, tone = "ink", isFirstCut, type = TYPE_V5, top = CAPTION.top }) => {
   const frame = useCurrentFrame();
   const { durationInFrames } = useVideoConfig();
-  const colours = TYPE_V5.tone[tone];
+  const colours = type.tone[tone];
 
   // Hand-over to the next cut (skipped in one-frame stills).
   const outStart = durationInFrames - MOTION_V5.captionOutFrames;
@@ -53,7 +60,7 @@ export const CaptionV5: React.FC<{
         position: "absolute",
         left: CAPTION.left,
         right: CAPTION.right,
-        top: CAPTION.top,
+        top,
         color: colours.color,
         textShadow: colours.halo,
         opacity: 1 - out,
@@ -63,14 +70,14 @@ export const CaptionV5: React.FC<{
       {title || subtitle ? (
         <div style={{ translate: `0px ${still ? 0 : settle}px` }}>
           {/* "\n" in a title is a deliberate line break (pre-line), for names wider than the frame. */}
-          {title ? <div style={{ ...TYPE_V5.title, whiteSpace: "pre-line" }}>{title}</div> : null}
-          {subtitle ? <div style={{ ...TYPE_V5.subtitle, color: colours.soft, marginTop: TYPE_V5.titleToSubtitleGap }}>{subtitle}</div> : null}
+          {title ? <div style={{ ...type.title, whiteSpace: "pre-line" }}>{title}</div> : null}
+          {subtitle ? <div style={{ ...type.subtitle, color: colours.soft, marginTop: type.titleToSubtitleGap }}>{subtitle}</div> : null}
         </div>
       ) : null}
       <div
         style={{
-          ...TYPE_V5.body,
-          marginTop: title || subtitle ? TYPE_V5.nameToBodyGap : 0,
+          ...type.body,
+          marginTop: title || subtitle ? type.nameToBodyGap : 0,
           opacity: still ? 1 : bodyIn.opacity,
           translate: `0px ${still ? 0 : bodyIn.y}px`,
         }}

@@ -33,11 +33,12 @@ src/ads/template/   shared design system and components (captions, layouts, moti
 src/ads/products/   one file per ad: images, crops, push-in focus, English lines
 src/Root.tsx        registers every ad in Remotion Studio
 tools/              render script (one bundle, stills, MP4, shared end card), clip watcher
-public/fonts/       LINE Seed Sans (SIL Open Font License 1.1, see OFL.txt)
+public/fonts/       LINE Seed Sans (brand) and SUIT (content), both SIL Open Font License 1.1 (see each OFL.txt)
 ```
 
 ## Licences
 
 - Code: all rights reserved by KURIO unless stated otherwise.
 - LINE Seed Sans: © LY Corporation, SIL Open Font License 1.1 (`public/fonts/line-seed/OFL.txt`).
+- SUIT: © SUNN (sun.fo/suit), SIL Open Font License 1.1 (`public/fonts/suit/OFL.txt`).
 - Remotion is used under its own licence terms ([remotion.dev/license](https://www.remotion.dev/license)).

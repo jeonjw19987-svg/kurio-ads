@@ -115,7 +115,8 @@ export type ProductAd = {
    * Design system version (tokens.ts). Default "v4". "v5" = v5 captions, soft photo layout, black end card and
    * the shared v5 sound. Switch an ad only together with its review; all four should end on the same version.
    */
-  design?: "v4" | "v5";
+  // "v6" = v5 with SUIT content typography (TYPE_V6) and the ① caption block raised (CAPTION_V6).
+  design?: "v4" | "v5" | "v6";
 };
 
 /** Props of the ad compositions. `clips` is filled by calculateMetadata (which slot files exist). */

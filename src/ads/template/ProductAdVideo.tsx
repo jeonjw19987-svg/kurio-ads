@@ -20,7 +20,8 @@ import type { AdProps } from "./types";
  */
 export const ProductAdVideo: React.FC<AdProps> = ({ ad, withEndCard, clips }) => {
   const cut = VIDEO.sceneFrames;
-  const v5 = ad.design === "v5";
+  // v5 and v6 share images, motion, end card and sound; v6 only changes the content typography.
+  const v5 = ad.design === "v5" || ad.design === "v6";
   return (
     <AbsoluteFill style={{ backgroundColor: COLORS.ground }}>
       {/* v5: the shared sound (src/ads/sound.json). v4: src/ads/audio.json (null = silent). */}
