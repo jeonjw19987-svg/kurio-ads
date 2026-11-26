@@ -38,7 +38,7 @@ Remotion Studio opens at http://localhost:3000. Every ad has:
 npm run composite:d   # D only: put the real plate into the operator's ② ④ scenes → public/assets/D_najeon/*_final.png
 npm run a:render      # Ad A FINAL → out/FINAL/INTERNAL_REVIEW/A-moon-jar/
 npm run b:render      # Ad B FINAL → out/FINAL/INTERNAL_REVIEW/B-traditional-gat/
-npm run c:render      # Ad C FINAL → out/FINAL/INTERNAL_REVIEW/C-gotae-gat/
+npm run c:render      # Ad C FINAL v2 → out/FINAL/INTERNAL_REVIEW/C-gotae-gat-v2/ (① "GOTAE Tableware.")
 npm run d:render      # Ad D FINAL → out/FINAL/INTERNAL_REVIEW/D-tiger-magpie/
 npm run render:all    # all four, one after another
 npm run <x>:stills    # stills + thumbnail only, for a quick review (stills:all for all four)

@@ -15,7 +15,8 @@ import type { ProductAd } from "../template/types";
  *                                 its form is unchanged)
  * - 04_in_use_alt.png 522 ×  654  the set in use (bread on the plate, milk in the cup) — ④ (×2.2; a larger in-use
  *                                 photo is on the "needed" list). The room photo above is the review alternative.
- * Copy (GOTAE product page, checked 2026-11-26): handmade in Icheon, Korea, by GOTAE's domestic partner →
+ * Brand: GOTAE (the brand's own English spelling on gotae.kr); GAT is the collection's name. ① title "GOTAE Tableware."
+ * (2026-11-26, was "GAT Tableware."). Copy (GOTAE product page, checked 2026-11-26): handmade in Icheon, Korea, by GOTAE's domestic partner →
  * ③ "Designed and made in Korea."
  * Source and rights records: docs/internal/ (local, not public).
  */
@@ -31,14 +32,14 @@ export const adCGotaeGat: ProductAd = {
   code: "C",
   compositionId: "KURIO-AD-C-GOTAE-GAT",
   slug: "c-gotae-gat",
-  productName: "GAT tableware",
+  productName: "GOTAE GAT tableware",
   status: "final",
   design: "v6",
   scenes: [
     {
       role: "PRODUCT",
       id: "s01-product",
-      caption: { title: "GAT Tableware.", subtitle: "A plate and a cup.", body: ["Inspired by the Korean gat."] },
+      caption: { title: "GOTAE Tableware.", subtitle: "A plate and a cup.", body: ["Inspired by the Korean gat."] },
       // Cup upturned on the plate: the gat's silhouette, whole, on GOTAE's grey studio backdrop (×1.38).
       visual: { kind: "photo", layout: "soft", image: STACKED, crop: { x: 0, y: 0, w: 1000, h: 1029 }, focus: [508, 560] },
     },

@@ -39,9 +39,11 @@
 | ④ | **Tradition, beautifully displayed.** (이전: A piece of Korean heritage.) |
 
 ### C · GOTAE 갓 GAT 테이블웨어
+브랜드 영문 표기는 고태 공식 홈페이지 기준 **GOTAE**이고, **GAT**은 상품 컬렉션 이름입니다. ① 상품명은 브랜드명으로 씁니다(C v2, 2026-11-26).
+
 | 컷 | 최종 자막 |
 |---|---|
-| ① | GAT Tableware. / A plate and a cup. / **Inspired by the Korean gat.** (이전: Stacked into a Korean hat.) |
+| ① | **GOTAE Tableware.** (이전: GAT Tableware.) / A plate and a cup. / **Inspired by the Korean gat.** (이전: Stacked into a Korean hat.) |
 | ② | The brim is the plate. / The crown is the cup. |
 | ③ | Designed and made in Korea. |
 | ④ | Korean design / for everyday rituals. |
@@ -120,7 +122,7 @@
 |---|---|---|---|
 | A | A Korean moon jar, shaped by hand and glazed by the potter. An 18th-century Joseon form, never perfectly round. | Korean moon jar | A quiet beauty for your home. |
 | B | The gat, the traditional Korean hat of Joseon scholars. Split bamboo, woven by hand, light enough to see through. | Traditional Korean gat | Tradition, beautifully displayed. |
-| C | A plate and a cup, inspired by the Korean gat. GAT tableware, designed and made in Korea. | GAT Tableware | Korean design for everyday rituals. |
+| C | A plate and a cup, inspired by the Korean gat. The GAT collection by GOTAE, designed and made in Korea. | GOTAE Tableware | Korean design for everyday rituals. |
 | D | Tiger and magpie, a Korean folk motif in mother-of-pearl and lacquer. The tiger wards off bad luck; the magpie brings good news. | Korean mother-of-pearl plate | A wish for good fortune. |
 
 ## 8. 실제 출력 파일
@@ -130,7 +132,7 @@
 |---|---|---|---|---|
 | A | `KURIO_AD_A_MOON_JAR_FINAL.mp4` | `KURIO_AD_A_MOON_JAR_FINAL_SILENT.mp4` | `KURIO_AD_A_MOON_JAR_FINAL_THUMBNAIL.png` | 2.94 Mbps, 6.0 MB |
 | B | `KURIO_AD_B_TRADITIONAL_GAT_FINAL.mp4` | `KURIO_AD_B_TRADITIONAL_GAT_FINAL_SILENT.mp4` | `KURIO_AD_B_TRADITIONAL_GAT_FINAL_THUMBNAIL.png` | 27.25 Mbps, 51.6 MB |
-| C | `KURIO_AD_C_GOTAE_GAT_FINAL.mp4` | `KURIO_AD_C_GOTAE_GAT_FINAL_SILENT.mp4` | `KURIO_AD_C_GOTAE_GAT_FINAL_THUMBNAIL.png` | 2.44 Mbps, 5.1 MB |
+| C | `KURIO_AD_C_GOTAE_GAT_FINAL_v2.mp4` | `KURIO_AD_C_GOTAE_GAT_FINAL_v2_SILENT.mp4` | `KURIO_AD_C_GOTAE_GAT_FINAL_v2_THUMBNAIL.png` | 2.45 Mbps, 5.1 MB |
 | D | `KURIO_AD_D_TIGER_MAGPIE_FINAL.mp4` | `KURIO_AD_D_TIGER_MAGPIE_FINAL_SILENT.mp4` | `KURIO_AD_D_TIGER_MAGPIE_FINAL_THUMBNAIL.png` | 8.56 Mbps, 16.5 MB |
 
 **실측 검수 (2026-11-26):**
@@ -138,6 +140,16 @@
 - 엔드카드(마지막 90프레임)는 디코딩 결과가 네 편 모두 같습니다. 음원도 네 편 모두 같습니다.
 - 무음 마스터 네 개는 모든 샘플이 0입니다.
 - B의 비트레이트가 높은 것은 대나무 망사의 세밀한 디테일 때문입니다. 렌더 설정은 네 편이 같습니다.
+
+**C v2 (2026-11-26):**
+- ① 상품명만 "GOTAE Tableware."로 바꿨습니다. 한 줄에 들어가고 크기·위치는 그대로입니다.
+- ②~⑤는 이전 C FINAL과 디코딩 결과가 같습니다.
+- 이전 C 파일은 `out/FINAL/_previous/`에 있습니다(렌더 원본은 `INTERNAL_REVIEW/C-gotae-gat/`).
+
+**KURIO 상품 페이지 확인 (2026-11-26):**
+- 주소는 그대로입니다: https://www.kuriokorea.com/en/shop/gotae-gat-chorip-black
+- 브랜드 상자, 사진 크레딧, 본문("GOTAE's GAT collection", "by GOTAE's ceramics partner")이 모두 GOTAE로 표기되어 있습니다.
+- 상품명 "GAT Chorip Plate & Cup Set — Black"의 GAT은 컬렉션 이름입니다. 한국어 페이지도 브랜드 GOTAE로 표기되어 있습니다.
 
 **그 밖의 위치:**
 - 렌더 작업 폴더 `out/FINAL/INTERNAL_REVIEW/<편>/`에 같은 파일과 장면 스틸(`stills/`), 렌더 보고서(`*_render-report.json`)가 있습니다.
