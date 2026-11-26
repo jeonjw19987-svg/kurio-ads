@@ -5,8 +5,8 @@
 - `npm ci` (do not copy `node_modules` between machines).
 - The first render downloads Remotion's Chrome Headless Shell (about 130 MB) automatically.
 
-## Assets not in this repo
-Product images are kept outside git. Put them at these paths before rendering:
+## Assets
+Since 2026-11-27 the product images are in git too (owner decision), so a fresh clone renders as is. They are at:
 
 ```
 public/assets/A_moonjar/            01_product_v4.png.png, 04_in_place_v4.png.png   (v4 also used 02_detail.png, 03_making.png)
@@ -18,8 +18,7 @@ public/assets/D_najeon/             01_product.png, 02_detail.png (also ③), 04
 
 The exact file list and sizes are in each product file under `src/ads/products/`.
 
-Audio files are not in git either: run `npm run sound` once to write `public/audio/kurio-sound-v5.wav` (the same file every time)
-before previewing or rendering.
+The audio is in git as well (`public/audio/kurio-sound-v5.wav`); `npm run sound` writes the same file byte for byte.
 
 ## Preview
 ```bash

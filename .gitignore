@@ -1,28 +1,17 @@
 node_modules
 dist
+output
 .DS_Store
 .env
 .env.*
 
-# Rendered videos, stills and caches — never committed.
-out
-output
-
 # Generated clips (Higgsfield) are large binaries: keep them as files. The slot folders stay (.gitkeep).
 public/clips/**/*.mp4
 
-# ── PUBLIC REPOSITORY SCOPE ──────────────────────────────────────────────────────────────────────────
-# This repository is public. Product photos whose usage rights are not confirmed stay on the local machine
-# (and in the approved transfer location), never in git. See RENDER_GUIDE.md → "Assets not in this repo".
-public/assets/
-public/products/
-archive/*/public/
-
-# Internal production documents (storyboard, sources, rights, review, handoff) — local only.
-docs/internal/
-
-# Older versions' source (v1 reconstruction) stays local and in the tagged history.
-archive/
-
-# Audio files (music, sound effects) stay local — the v5 track is regenerated exactly by `npm run sound`.
-public/audio/
+# ── REPOSITORY SCOPE (owner decision, 2026-11-27) ─────────────────────────────────────────────────────
+# Everything else is tracked, so no work lives on one computer only: renders (out/), product images
+# (public/assets/, public/products/), internal documents (docs/internal/), the archive and the audio.
+# The owner is switching the repository to private; until then all of it is public.
+#
+# Zip bundles in out/ only repeat files tracked beside them, and GitHub refuses files over 100 MB.
+out/**/*.zip
