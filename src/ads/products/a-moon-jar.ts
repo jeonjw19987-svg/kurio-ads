@@ -15,6 +15,9 @@ import type { ProductAd } from "../template/types";
  * - ② store "| Detail"   left half 712 × 900 of the 1440 × 900 original → ×1.58 (soft layout)
  * - ③ store process      right half 716 × 900 of the 1440 × 900 original → ×1.58 (v4: 384 × 492 ×2.81)
  * - ④ 04_in_place_v4     941 × 1672 → full frame ×1.15, cropped in ×1.15 → ×1.32
+ * ① and ④ (the planner's files) carry C2PA content credentials: created with ChatGPT (gpt-image) — AI-generated
+ * images of a moon jar, not photographs of this jar. ② and ③ are the store's own photos.
+ * FINAL (2026-11-26, final copy review): ④ line → "A quiet beauty for your home."
  */
 
 const DIR = "assets/A_moonjar";
@@ -71,8 +74,8 @@ export const adAMoonJar: ProductAd = {
     {
       role: "IN PLACE",
       id: "s04-in-place",
-      // Planner's line. Alternative for review only (not used): "A quiet beauty for your home." — see adAMoonJarAltCopy.
-      caption: { body: ["Quiet on a console."] },
+      // Final copy review (2026-11-26): "Quiet on a console." → the planner's final line.
+      caption: { body: ["A quiet beauty for your home."] },
       // Full frame, cropped in 15% from the bottom edge: the jar reads larger and sits ~110 px higher, clear of the
       // Reels caption area; the wall light and the room's proportions are kept. Push-in centred on the jar.
       visual: { kind: "photo", layout: "full", image: IN_PLACE, focus: [468, 1030], zoom: 1.15, zoomAnchor: [470, 1672] },
@@ -80,15 +83,3 @@ export const adAMoonJar: ProductAd = {
   ],
 };
 
-/** Review only: ④ with the alternative line. Not an ad; rendered as a still for the planner to compare. */
-export const adAMoonJarAltCopy: ProductAd = {
-  ...adAMoonJar,
-  compositionId: "KURIO-AD-A-MOON-JAR-ALT-COPY",
-  status: "review",
-  scenes: [
-    adAMoonJar.scenes[0],
-    adAMoonJar.scenes[1],
-    adAMoonJar.scenes[2],
-    { ...adAMoonJar.scenes[3], caption: { body: ["A quiet beauty for your home."] } },
-  ],
-};

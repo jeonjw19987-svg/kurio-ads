@@ -1,5 +1,5 @@
 import { Composition, Folder, Still } from "remotion";
-import { adAMoonJar, adAMoonJarAltCopy } from "./ads/products/a-moon-jar";
+import { adAMoonJar } from "./ads/products/a-moon-jar";
 import { adBTraditionalGat } from "./ads/products/b-traditional-gat";
 import { adCGotaeGat, adCGotaeGatRoom } from "./ads/products/c-gotae-gat";
 import { adDTigerMagpie } from "./ads/products/d-tiger-magpie";
@@ -67,15 +67,6 @@ export const RemotionRoot: React.FC = () => {
           id={adCGotaeGatRoom.compositionId}
           component={ProductAdVideo}
           defaultProps={{ ad: adCGotaeGatRoom, withEndCard: true }}
-          calculateMetadata={resolveClips}
-          durationInFrames={cut * VIDEO.sceneCount}
-          {...size}
-        />
-        {/* Review only: A with the alternative ④ line, for the planner to compare. Not an ad. */}
-        <Composition
-          id={adAMoonJarAltCopy.compositionId}
-          component={ProductAdVideo}
-          defaultProps={{ ad: adAMoonJarAltCopy, withEndCard: true }}
           calculateMetadata={resolveClips}
           durationInFrames={cut * VIDEO.sceneCount}
           {...size}

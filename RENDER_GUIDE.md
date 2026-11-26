@@ -35,15 +35,19 @@ Remotion Studio opens at http://localhost:3000. Every ad has:
 
 ## Render
 ```bash
-npm run a:render      # Ad A v6 → out/A-moon-jar-v6/ (v5 output kept in out/A-moon-jar-v5/)
-npm run b:render      # Ad B v2 → out/B-traditional-gat-v2/
-npm run c:render      # Ad C v2 → out/C-gotae-gat-v2/
-npm run d:render      # Ad D v3 → out/D-tiger-magpie-v3/ (v1, v2 output kept)
+npm run composite:d   # D only: put the real plate into the operator's ② ④ scenes → public/assets/D_najeon/*_final.png
+npm run a:render      # Ad A FINAL → out/FINAL/INTERNAL_REVIEW/A-moon-jar/
+npm run b:render      # Ad B FINAL → out/FINAL/INTERNAL_REVIEW/B-traditional-gat/
+npm run c:render      # Ad C FINAL → out/FINAL/INTERNAL_REVIEW/C-gotae-gat/
+npm run d:render      # Ad D FINAL → out/FINAL/INTERNAL_REVIEW/D-tiger-magpie/
 npm run render:all    # all four, one after another
-npm run <x>:stills    # stills + thumbnail only, for a quick review
-npm run sheet:all     # out/KURIO_ADS_A-D_review.png — the five stills of every ad in one image
+npm run <x>:stills    # stills + thumbnail only, for a quick review (stills:all for all four)
+npm run sheet:all     # out/FINAL/KURIO_ADS_A-D_FINAL_review.png — the five stills of every ad in one image
 npm run sound:apply   # swap src/ads/sound.json into all four renders (no frames re-rendered)
 ```
+
+The renders go to `out/FINAL/INTERNAL_REVIEW/<ad>/` (image rights not confirmed); the finished files are also copied
+flat into `out/FINAL/`. Earlier versions stay in `out/<ad>-v*/`. See STORYBOARD_FINAL.md for the final state.
 
 `tools/render-ad.mjs` does the following:
 - Bundles once and renders five representative stills and a thumbnail.

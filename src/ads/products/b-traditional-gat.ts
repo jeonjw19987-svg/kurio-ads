@@ -64,7 +64,7 @@ export const adBTraditionalGat: ProductAd = {
     {
       role: "IN PLACE",
       id: "s04-in-place",
-      caption: { body: ["A piece of Korean heritage."] },
+      caption: { body: ["Tradition, beautifully displayed."] },
       // Staged composite (recorded as such): the same studio photo on the shared wall-and-walnut-shelf set, on a slim
       // walnut display stand — a collectible object in a modern room, not worn.
       visual: {

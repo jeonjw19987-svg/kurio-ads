@@ -38,7 +38,7 @@ export const adCGotaeGat: ProductAd = {
     {
       role: "PRODUCT",
       id: "s01-product",
-      caption: { title: "GAT Tableware.", subtitle: "A plate and a cup.", body: ["Stacked into a Korean hat."] },
+      caption: { title: "GAT Tableware.", subtitle: "A plate and a cup.", body: ["Inspired by the Korean gat."] },
       // Cup upturned on the plate: the gat's silhouette, whole, on GOTAE's grey studio backdrop (×1.38).
       visual: { kind: "photo", layout: "soft", image: STACKED, crop: { x: 0, y: 0, w: 1000, h: 1029 }, focus: [508, 560] },
     },
