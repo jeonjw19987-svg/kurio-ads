@@ -1,58 +1,85 @@
 import type { ProductAd } from "../template/types";
 
 /**
- * Ad C — GAT tableware (plate + cup, black). INTERNAL REVIEW TEMPLATE, 2026-11-26.
+ * Ad C — GOTAE "GAT" tableware, 초립 (Chorip) black, plate + cup for one. v1, 2026-11-26, design "v5"
+ * (same template, type, motion, end card and sound as A v5 — only the images and lines differ).
  *
- * Not yet approved as an ad: this is a layout/copy template only. Renders are named _INTERNAL_REVIEW and no MP4 is
- * produced (npm run c:stills). Once approved: replace images if needed, set status to "final", render.
- *
- * Known gaps for approval day:
- * - ④ IN PLACE: no photo of the set in use on a dining table.
- * - The seller's photos have a dark grey gradient at the top, where the caption sits: #111 text does not read there.
- *   An approved photo with a light upper area (or an agreed layout change for C) is needed.
- * - Sources are 750×750; ① is enlarged ~2.6×.
- * Copy: GOTAE states the set is handmade in Icheon, Korea, by its domestic partner → "Designed and made in Korea."
- * Source and rights records: docs/internal/PRODUCT_SOURCES.md (local, not public).
+ * Images (not in this repository): public/assets/C_gotae/, all of the BLACK set from GOTAE's own product page
+ * (crop / downscale only; the white version and customers' photos are not used):
+ * - 01_product.png   1000 × 1029  the set stacked into a hat, studio (crop of the page's long detail image)
+ * - 02_detail.png    1000 × 1000  plate and cup apart, with the paper box (crop of the same detail image)
+ * - 03_making.png     750 ×  750  the plate's matte glaze and rim (the page's own close-up; the largest it has)
+ * - 04_in_place.png  1800 × 2400  the set on a dark wood table in a room, from the 3024 × 4032 original, MIRRORED
+ *                                 left↔right so the plant is not behind the caption (the set is round and symmetric:
+ *                                 its form is unchanged)
+ * - 04_in_use_alt.png 522 ×  654  the set in use (bread on the plate, milk in the cup) — ④ (×2.2; a larger in-use
+ *                                 photo is on the "needed" list). The room photo above is the review alternative.
+ * Copy (GOTAE product page, checked 2026-11-26): handmade in Icheon, Korea, by GOTAE's domestic partner →
+ * ③ "Designed and made in Korea."
+ * Source and rights records: docs/internal/ (local, not public).
  */
 
 const DIR = "assets/C_gotae";
-const STACKED = { src: `${DIR}/01_product.jpg`, width: 750, height: 750 } as const;
-const PARTS = { src: `${DIR}/02_detail.jpg`, width: 750, height: 750 } as const;
-const PLATE_SURFACE = { src: `${DIR}/03_making.jpg`, width: 750, height: 750 } as const;
+const STACKED = { src: `${DIR}/01_product.png`, width: 1000, height: 1029 } as const;
+const APART = { src: `${DIR}/02_detail.png`, width: 1000, height: 1000 } as const;
+const PLATE = { src: `${DIR}/03_making.png`, width: 750, height: 750 } as const;
+const ROOM = { src: `${DIR}/04_in_place.png`, width: 1800, height: 2400 } as const;
+const IN_USE = { src: `${DIR}/04_in_use_alt.png`, width: 522, height: 654 } as const;
 
 export const adCGotaeGat: ProductAd = {
   code: "C",
   compositionId: "KURIO-AD-C-GOTAE-GAT",
   slug: "c-gotae-gat",
   productName: "GAT tableware",
-  status: "review",
+  status: "final",
+  design: "v5",
   scenes: [
     {
       role: "PRODUCT",
       id: "s01-product",
-      caption: { title: "GAT Tableware.", subtitle: "A plate and a cup.", body: ["Stack them. It becomes a hat."] },
-      // Cup upturned on the plate: the gat's silhouette.
-      visual: { kind: "photo", layout: "full", image: STACKED, crop: { x: 164, y: 0, w: 422, h: 750 }, focus: [375, 470] },
+      caption: { title: "GAT Tableware.", subtitle: "A plate and a cup.", body: ["Stacked into a Korean hat."] },
+      // Cup upturned on the plate: the gat's silhouette, whole, on GOTAE's grey studio backdrop (×1.38).
+      visual: { kind: "photo", layout: "soft", image: STACKED, crop: { x: 0, y: 0, w: 1000, h: 1029 }, focus: [508, 560] },
     },
     {
       role: "DETAIL",
       id: "s02-detail",
-      caption: { body: ["The brim is the plate.", "The crown is the cup."] },
-      // Plate and cup apart (with the folded paper box behind).
-      visual: { kind: "photo", layout: "plate", image: PARTS, crop: { x: 120, y: 0, w: 578, h: 750 }, focus: [420, 420] },
+      // Dark studio backdrop → white caption.
+      caption: { body: ["The brim is the plate.", "The crown is the cup."], tone: "paper" },
+      visual: { kind: "photo", layout: "soft", image: APART, crop: { x: 120, y: 0, w: 760, h: 1000 }, focus: [520, 600] },
     },
     {
       role: "MAKING",
       id: "s03-making",
       caption: { body: ["Designed and made in Korea."] },
-      // The plate's glazed surface and form.
-      visual: { kind: "photo", layout: "plate", image: PLATE_SURFACE, crop: { x: 86, y: 0, w: 578, h: 750 }, focus: [375, 400] },
+      // The plate's matte black glaze and its soft rim. Same camera as every ③ (3% push-in, 16 px drift).
+      visual: { kind: "photo", layout: "soft", image: PLATE, crop: { x: 90, y: 0, w: 570, h: 750 }, focus: [375, 420], pushIn: 1.03, drift: [-16, 0] },
     },
     {
       role: "IN PLACE",
       id: "s04-in-place",
-      caption: { body: ["On the table, every day."] },
-      visual: { kind: "missing", need: "approved photo of the plate and cup in use on a dining table" },
+      caption: { body: ["Korean design", "for everyday rituals."] },
+      // GOTAE's own in-use photo: bread on the plate, milk in the cup — the set as everyday tableware (the brief's key
+      // point for C). The light table continues out of focus behind the caption. ×2.2 — the page has nothing larger;
+      // a larger in-use photo is on the "needed" list. The room photo is kept as a review alternative below.
+      visual: { kind: "photo", layout: "soft", image: IN_USE, crop: { x: 0, y: 0, w: 522, h: 654 }, focus: [300, 360] },
+    },
+  ],
+};
+
+/** Review only: ④ as GOTAE's room photo (mirrored; sharp, but the set is displayed, not in use). */
+export const adCGotaeGatRoom: ProductAd = {
+  ...adCGotaeGat,
+  compositionId: "KURIO-AD-C-GOTAE-GAT-ROOM",
+  status: "review",
+  scenes: [
+    adCGotaeGat.scenes[0],
+    adCGotaeGat.scenes[1],
+    adCGotaeGat.scenes[2],
+    {
+      ...adCGotaeGat.scenes[3],
+      // Mirrored, so the plant is not behind the caption; full frame, ×0.8 of the 1800 px file.
+      visual: { kind: "photo", layout: "full", image: ROOM, crop: { x: 0, y: 0, w: 1350, h: 2400 }, focus: [908, 1710] },
     },
   ],
 };

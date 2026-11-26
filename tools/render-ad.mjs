@@ -9,7 +9,8 @@
 //     --endcard=<id>           end-card composition (default KURIO-EndCard; v5: KURIO-EndCard-v5)
 //     --quality=master         v5 master settings: lossless PNG frame capture (no JPEG step before H.264),
 //                              x264 CRF 14, preset slow (default: v4 settings — JPEG capture, CRF 18, medium)
-//     --audio=<public path>    track muxed under the 15 s video as AAC (default src/ads/audio.json)
+//     --audio=shared|<path>    track muxed under the 15 s video as AAC: "shared" = src/ads/sound.json (all v5 ads),
+//                              or a public path (default src/ads/audio.json, the v4 setting)
 //     --silent-master          also write <baseName>_SILENT.mp4: the same video stream with a silent AAC track
 //     --review-still=<id>:<frame>:<name>   also render one still of another composition (e.g. an alternative line)
 //
@@ -45,7 +46,9 @@ const reviewStill = flag("review-still");
 
 const root = path.resolve(import.meta.dirname, "..");
 const audioJson = JSON.parse(fs.readFileSync(path.join(root, "src/ads/audio.json"), "utf8"));
-const audio = flag("audio") ? { src: flag("audio"), volume: 1 } : audioJson;
+// --audio=shared: the one shared track for every v5 ad (src/ads/sound.json); --audio=<public path>: that file.
+const shared = JSON.parse(fs.readFileSync(path.join(root, "src/ads/sound.json"), "utf8"));
+const audio = flag("audio") === "shared" ? { src: shared.track, volume: shared.volume } : flag("audio") ? { src: flag("audio"), volume: 1 } : audioJson;
 const bundleDir = fs.mkdtempSync(path.join(os.tmpdir(), "kurio-ad-bundle-"));
 // Same encoder settings for body and end card, so the two streams can be joined without re-encoding.
 // master: frames are captured as lossless PNG, so H.264 is the only lossy step (no double compression).

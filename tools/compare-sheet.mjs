@@ -1,6 +1,6 @@
-// Before/after sheet for a review: two rows of five scene stills (e.g. v4 vs v5), one PNG.
+// Review sheet: one row of five scene stills per entry (v4 vs v5, or A, B, C, D side by side), one PNG.
 //
-//   node tools/compare-sheet.mjs <output.png> "<title>" <beforeLabel> <beforeStillsDir> <afterLabel> <afterStillsDir>
+//   node tools/compare-sheet.mjs <output.png> "<title>" <label> <stillsDir> [<label> <stillsDir> …]
 //
 // Each stills dir must contain *_Scene_01_PRODUCT.png … *_Scene_05_END-CARD.png (tools/render-ad.mjs output).
 // The stills are copied to a temporary public folder for the render; nothing is written to public/.
@@ -10,8 +10,8 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 
-const [output, title, beforeLabel, beforeDir, afterLabel, afterDir] = process.argv.slice(2);
-if (!afterDir) {
+const [output, title, ...pairs] = process.argv.slice(2);
+if (pairs.length < 2 || pairs.length % 2) {
   console.error('usage: node tools/compare-sheet.mjs <output.png> "<title>" <beforeLabel> <beforeDir> <afterLabel> <afterDir>');
   process.exit(1);
 }
@@ -32,10 +32,8 @@ const pick = (dir, tag) =>
   });
 
 try {
-  const rows = [
-    { label: beforeLabel, files: pick(beforeDir, "before") },
-    { label: afterLabel, files: pick(afterDir, "after") },
-  ];
+  const rows = [];
+  for (let i = 0; i < pairs.length; i += 2) rows.push({ label: pairs[i], files: pick(pairs[i + 1], `row${i / 2}`) });
   const serveUrl = await bundle({ entryPoint: path.join(root, "tools/compare/entry.tsx"), outDir: path.join(tmp, "bundle"), publicDir: pub, enableCaching: false });
   const inputProps = { title, rows, columns: ["① PRODUCT", "② DETAIL", "③ MAKING", "④ IN PLACE", "⑤ END CARD"] };
   const composition = await selectComposition({ serveUrl, id: "CompareSheet", inputProps });

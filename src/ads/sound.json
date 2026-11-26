@@ -1,0 +1,7 @@
+{
+  "_note": "Shared sound for every KURIO ad on design v5 (A, B, C, D) — one place to change the music for all four. Studio previews it (SharedSound.tsx); tools/render-ad.mjs --audio=shared muxes it under each joined 15 s video; tools/apply-sound.mjs swaps it into existing renders without re-rendering any frames. The track must start at 0 s and be 15 s long (cut accents at 3/6/9/12 s, signature at 13.5 s).",
+  "track": "audio/kurio-sound-v5.wav",
+  "volume": 1,
+  "source": "KURIO original — composed and synthesised in code by tools/compose-sound.mjs (no samples, no third-party audio)",
+  "license": "KURIO's own work; no third-party rights; cleared for commercial advertising"
+}

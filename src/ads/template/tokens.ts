@@ -238,12 +238,5 @@ export const END_V5 = {
   markTracking: 0.32,
 } as const;
 
-/**
- * v5 sound: one shared, pre-mixed 15 s track (music bed + cut accents + end-card signature), written by
- * tools/compose-sound.mjs — original, made in-house from code (no samples, no third-party material).
- * The render muxes it under the joined video (video stream copied). Silent masters use silence instead.
- */
-export const SOUND_V5 = {
-  track: "audio/kurio-sound-v5.wav",
-  volume: 1,
-} as const;
+// v5 sound: one shared, pre-mixed 15 s track for every ad (music bed + cut accents + end-card signature). Not a
+// design token: see src/ads/sound.json (the single setting), SharedSound.tsx and tools/compose-sound.mjs.

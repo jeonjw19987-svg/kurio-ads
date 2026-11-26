@@ -11,12 +11,15 @@ Product images are kept outside git. Put them at these paths before rendering:
 ```
 public/assets/A_moonjar/            01_product_v4.png.png, 04_in_place_v4.png.png   (v4 also used 02_detail.png, 03_making.png)
 public/products/a-moon-jar/         02-detail.png, 03-making.png   (the store's 1440×900 originals; A v5 uses both)
-public/assets/B_traditional_gat/    01_product.jpg (also used by ④), 02_detail.jpg, 03_making.jpg
-public/assets/C_gotae/              01_product.jpg, 02_detail.jpg, 03_making.jpg   (④ not yet available)
-public/assets/D_najeon/             01_product.jpg, 02_detail.jpg (also used by ③), 04_in_place.jpg
+public/assets/B_traditional_gat/    01_product.png (also ④), 02_detail.png, 03_making.png
+public/assets/C_gotae/              01_product.png, 02_detail.png, 03_making.png, 04_in_use_alt.png (④), 04_in_place.png (④ review alternative)
+public/assets/D_najeon/             01_product.png, 02_detail.png (also ③), 04_in_place.png
 ```
 
 The exact file list and sizes are in each product file under `src/ads/products/`.
+
+Audio files are not in git either: run `npm run sound` once to write `public/audio/kurio-sound-v5.wav` (the same file every time)
+before previewing or rendering.
 
 ## Preview
 ```bash
@@ -32,11 +35,14 @@ Remotion Studio opens at http://localhost:3000. Every ad has:
 
 ## Render
 ```bash
-npm run a:render      # Ad A v5 → out/A-moon-jar-v5/ (master quality, sound, silent master)
-npm run b:render      # Ad B → out/B-traditional-gat-v1/
-npm run c:stills      # Ad C → stills only (internal review template)
-npm run d:render      # Ad D → out/D-tiger-magpie-v1/
+npm run a:render      # Ad A v5 → out/A-moon-jar-v5/
+npm run b:render      # Ad B v1 → out/B-traditional-gat-v1/
+npm run c:render      # Ad C v1 → out/C-gotae-gat-v1/
+npm run d:render      # Ad D v1 → out/D-tiger-magpie-v1/
+npm run render:all    # all four, one after another
 npm run <x>:stills    # stills + thumbnail only, for a quick review
+npm run sheet:all     # out/KURIO_ADS_A-D_review.png — the five stills of every ad in one image
+npm run sound:apply   # swap src/ads/sound.json into all four renders (no frames re-rendered)
 ```
 
 `tools/render-ad.mjs` does the following:
@@ -56,7 +62,8 @@ so the join is still a stream copy. Files:
 | `stills/…_Scene_01…05` (+ `_tagline`, `_REVIEW_Scene_04_ALT-COPY`) | representative frames |
 | `…_render-report.json` | resolution, fps, profile, bitrate and audio of what was actually written (ffprobe) |
 
-Sound: `npm run sound` rewrites `public/audio/kurio-sound-v5.wav` from `tools/compose-sound.mjs` (deterministic).
+All four use design v5 and the same settings (`--quality=master --audio=shared --silent-master`).
+Sound: `src/ads/sound.json` is the one setting for all four. `npm run sound` rewrites `public/audio/kurio-sound-v5.wav` from `tools/compose-sound.mjs` (deterministic).
 
 Output name suffixes:
 
@@ -68,3 +75,7 @@ Output name suffixes:
 ## Generated clips (optional)
 A video file at `public/clips/<slug>/01-product.mp4` … `04-in-place.mp4` replaces that cut's image.
 `npm run a:watch` re-renders automatically whenever a clip is added or replaced.
+
+## Choosing source images
+`node tools/contact-sheet.mjs <out.png> "<title>" <folder> [cols]` puts every image of a folder (long detail-page strips cut into
+squares) on one sheet with file names and sizes. Working images are made from the originals by crop and downscale only.

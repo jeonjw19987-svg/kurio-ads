@@ -62,7 +62,8 @@ export const CaptionV5: React.FC<{
     >
       {title || subtitle ? (
         <div style={{ translate: `0px ${still ? 0 : settle}px` }}>
-          {title ? <div style={TYPE_V5.title}>{title}</div> : null}
+          {/* "\n" in a title is a deliberate line break (pre-line), for names wider than the frame. */}
+          {title ? <div style={{ ...TYPE_V5.title, whiteSpace: "pre-line" }}>{title}</div> : null}
           {subtitle ? <div style={{ ...TYPE_V5.subtitle, color: colours.soft, marginTop: TYPE_V5.titleToSubtitleGap }}>{subtitle}</div> : null}
         </div>
       ) : null}

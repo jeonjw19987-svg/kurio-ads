@@ -1,23 +1,28 @@
 import type { ProductAd } from "../template/types";
 
 /**
- * Ad B — Traditional Korean gat (black, heritage craft). v1, 2026-11-26.
+ * Ad B — Traditional Korean gat (heuklip, black; National Intangible Heritage maker). v1, 2026-11-26, design "v5"
+ * (same template, type, motion, end card and sound as A v5 — only the images and lines differ).
  *
- * Images (not in this repository): public/assets/B_traditional_gat/. Only photos of THIS gat and of its maker's
- * process are used; the maker's other gats are excluded (no mixing of different designs as one product).
- * ① and ④ use the same studio photo: a flat #F5F5F5 background, mapped to white (×255/245) and multiplied onto
- * KURIO's ground (①) or the shared IN PLACE set (④, a staged composite). The gat itself is not altered.
+ * Images (not in this repository): public/assets/B_traditional_gat/, prepared from the maker's own photos on the
+ * product page (tools: crop / Lanczos downscale only — nothing enlarged, retouched or generated):
+ * - 01_product.png  667 × 1001  the studio photo of this gat (the largest the page has) — ① and ④
+ * - 02_detail.png  2000 × 2072  the brim from above, from the 4700 × 4870 original (downscaled)
+ * - 03_making.png  2400 × 1776  the maker's hands shaping the woven brim with a heated iron, from the 4918 × 3638
+ *                               original (downscaled). Hands only; no face.
+ * Only photos of THIS gat and of its maker's process are used; the maker's other gats (feathered, red) and the
+ * portrait are excluded.
  *
- * Copy notes (facts as the maker states them on the listing, checked 2026-11-25):
- * - Listed material is bamboo; horsehair is not stated → the storyboard lines "Woven from horsehair." and
- *   "Split bamboo and horsehair, woven by hand" are replaced by the brief's own fallback and a bamboo-only line.
- * Source and rights records: docs/internal/PRODUCT_SOURCES.md (local, not public).
+ * Copy (the product page, checked 2026-11-26): material "대나무" (bamboo) in the listing; the brim (양태) is woven from
+ * bamboo split into thread (죽사), shaped with an iron, lacquered black; all handmade. Horsehair is mentioned only in
+ * the page's general text about gat, not for this piece → ③ "Split bamboo, woven by hand." (not "…and horsehair").
+ * Source and rights records: docs/internal/ (local, not public).
  */
 
 const DIR = "assets/B_traditional_gat";
-const STUDIO = { src: `${DIR}/01_product.jpg`, width: 667, height: 1001 } as const;
-const WEAVE = { src: `${DIR}/02_detail.jpg`, width: 1440, height: 1492 } as const;
-const MAKING = { src: `${DIR}/03_making.jpg`, width: 1440, height: 1065 } as const;
+const STUDIO = { src: `${DIR}/01_product.png`, width: 667, height: 1001 } as const;
+const WEAVE = { src: `${DIR}/02_detail.png`, width: 2000, height: 2072 } as const;
+const MAKING = { src: `${DIR}/03_making.png`, width: 2400, height: 1776 } as const;
 /** 255 / 245: the studio photo's flat background → white. */
 const MATTE = 1.0408;
 
@@ -27,35 +32,40 @@ export const adBTraditionalGat: ProductAd = {
   slug: "b-traditional-gat",
   productName: "Traditional Korean gat",
   status: "final",
+  design: "v5",
   scenes: [
     {
       role: "PRODUCT",
       id: "s01-product",
-      caption: { title: "Traditional Korean hat.", subtitle: "Gat.", body: ["A silhouette of Korean heritage."] },
-      // Whole gat with its strap, centred, crown below the two-line name block. Push-in anchored at the crown.
-      visual: { kind: "photo", layout: "full", image: STUDIO, matte: MATTE, placement: { scale: 1.7, left: -74, top: 376 }, focus: [361, 300] },
+      caption: { title: "Traditional\nKorean hat.", subtitle: "Gat.", body: ["A silhouette of Korean heritage."] },
+      // Title broken on purpose (it is wider than the frame at 88 px): "Traditional / Korean hat.", not "… / hat.".
+      // Whole gat with its strap on KURIO's warm ground (matte), centred below the name block. ×1.7 is the most this
+      // 667 px studio photo allows; a larger original is on the "needed" list.
+      visual: { kind: "photo", layout: "full", image: STUDIO, matte: MATTE, placement: { scale: 1.7, left: -74, top: 470 }, focus: [361, 300] },
     },
     {
       role: "DETAIL",
       id: "s02-detail",
       caption: { body: ["Worn by Joseon scholars —", "light enough to see through."] },
-      // The brim from above: fine bamboo weave radiating from the crown, light passing through.
-      visual: { kind: "photo", layout: "plate", image: WEAVE, crop: { x: 268, y: 172, w: 900, h: 1167 }, focus: [718, 755] },
+      // The brim from above: fine bamboo weave radiating from the crown, light passing through. Shown at ×0.88.
+      visual: { kind: "photo", layout: "soft", image: WEAVE, crop: { x: 372, y: 239, w: 1250, h: 1621 }, focus: [997, 1049] },
     },
     {
       role: "MAKING",
       id: "s03-making",
       caption: { body: ["Split bamboo,", "woven by hand."] },
-      // The maker's hands shaping the woven, still unlacquered brim with a heated iron. Hands only, no face.
-      // The brim's circle continues the circular weave of ② across the hard cut.
-      visual: { kind: "photo", layout: "plate", image: MAKING, crop: { x: 500, y: 0, w: 822, h: 1065 }, focus: [780, 420] },
+      // Cropped 100 px below the photo's top edge so the out-of-focus field behind the caption comes from the light
+      // cloth, not the hand at the very top (which smeared). Light field → ink caption.
+      // Hands shaping the woven, still unlacquered brim with a heated iron. Same camera as every ③: 3% push-in and a
+      // 16 px drift toward the hands. The brim's circle continues ②'s circular weave across the hard cut.
+      visual: { kind: "photo", layout: "soft", image: MAKING, crop: { x: 833, y: 100, w: 1370, h: 1676 }, focus: [1300, 700], pushIn: 1.03, drift: [-16, 0] },
     },
     {
       role: "IN PLACE",
       id: "s04-in-place",
-      caption: { body: ["An object on the shelf."] },
-      // Staged composite: the same studio photo on the shared wall-and-shelf set, the gat on a slim walnut display
-      // stand (seen through the woven crown), its strap trailing onto the shelf.
+      caption: { body: ["A piece of Korean heritage."] },
+      // Staged composite (recorded as such): the same studio photo on the shared wall-and-walnut-shelf set, on a slim
+      // walnut display stand — a collectible object in a modern room, not worn.
       visual: {
         kind: "set",
         image: STUDIO,

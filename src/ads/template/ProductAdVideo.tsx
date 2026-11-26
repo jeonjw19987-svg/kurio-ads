@@ -5,7 +5,8 @@ import audio from "../audio.json";
 import { EndCard } from "./EndCard";
 import { EndCardV5 } from "./EndCardV5";
 import { ProductScene } from "./ProductScene";
-import { clipPath, COLORS, SOUND_V5, VIDEO } from "./tokens";
+import { SharedSound } from "./SharedSound";
+import { clipPath, COLORS, VIDEO } from "./tokens";
 import type { AdProps } from "./types";
 
 /**
@@ -20,11 +21,11 @@ import type { AdProps } from "./types";
 export const ProductAdVideo: React.FC<AdProps> = ({ ad, withEndCard, clips }) => {
   const cut = VIDEO.sceneFrames;
   const v5 = ad.design === "v5";
-  // v5: the shared v5 sound (music bed, cut accents, end-card signature) — previewed here, muxed by render-ad.mjs.
-  const track = v5 ? SOUND_V5 : audio.src ? { track: audio.src, volume: audio.volume } : null;
   return (
     <AbsoluteFill style={{ backgroundColor: COLORS.ground }}>
-      {withEndCard && track ? <Audio src={staticFile(track.track)} volume={track.volume} /> : null}
+      {/* v5: the shared sound (src/ads/sound.json). v4: src/ads/audio.json (null = silent). */}
+      {withEndCard && v5 ? <SharedSound /> : null}
+      {withEndCard && !v5 && audio.src ? <Audio src={staticFile(audio.src)} volume={audio.volume} /> : null}
       {ad.scenes.map((scene, i) => (
         <Sequence key={scene.id} name={`${i + 1} ${scene.role}${clips?.[i] ? " · clip" : ` · ${scene.visual.kind}`}`} from={i * cut} durationInFrames={cut}>
           <ProductScene scene={scene} clip={clips?.[i] ?? null} design={ad.design} />
